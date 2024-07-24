@@ -22,21 +22,23 @@ namespace Zoompy
         private int _currentView = 0;
         [Header("System")] [SerializeField] private LayerView[] children;
 
-        void Start()
+        private void Awake()
         {
             //init
             foreach (var layer in children)
             {
                 layer.Init(this);
             }
+        }
 
+        void Start()
+        {
             for (var i = 0; i < _inputs.Length; i++)
             {
                 var input = _inputs[i];
                 input.ConnectedTo = this;
                 input.ConnectedIndex = i;
             }
-
             SetView(0);
         }
 
@@ -79,13 +81,6 @@ namespace Zoompy
             }
         }
         
-        void OnValidate()
-        {
-            if (children == null)
-            {
-                children = GetComponentsInChildren<LayerView>();
-            }
-        }
     }
 
 }

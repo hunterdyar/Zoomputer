@@ -6,6 +6,7 @@ namespace Zoompy
 	public class PortMaterialUpdater : MonoBehaviour
 	{
 		private SignalPort _port;
+		private Wire _wire;
 		private MeshRenderer _meshRenderer;
 		[SerializeField] private Material offMaterial;
 		[SerializeField] private Material onMaterial;
@@ -13,16 +14,30 @@ namespace Zoompy
 		{
 			_meshRenderer = GetComponent<MeshRenderer>();
 			_port = GetComponentInParent<SignalPort>();
+			_wire = GetComponentInParent<Wire>();
 		}
 
 		private void OnEnable()
 		{
-			_port.OnInputChange += OnInputChange;
+			if (_port != null)
+			{
+				_port.OnInputChange += OnInputChange;
+			}else if (_wire != null)
+			{
+				_wire.From.OnInputChange += OnInputChange;
+			}
 		}
 
 		private void OnDisable()
 		{
-			_port.OnInputChange -= OnInputChange;
+			if (_port != null)
+			{
+				_port.OnInputChange -= OnInputChange;
+			}
+			else if (_wire != null)
+			{
+				_wire.From.OnInputChange -= OnInputChange;
+			}
 		}
 
 		private void OnInputChange(int index, byte data)
@@ -39,7 +54,15 @@ namespace Zoompy
 
 		private void OnMouseDown()
 		{
-			_port.SetSignal(!_port.GetSignal());
+			if (_port != null)
+			{
+				
+			}
+			else if (_wire != null)
+			{
+				_wire.From.SetSignal(!_wire.From.GetSignal());
+			}
+			
 		}
 	}
 }
