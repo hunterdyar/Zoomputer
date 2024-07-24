@@ -11,7 +11,7 @@ public class LayerView : MonoBehaviour
     private bool _enabled;
     public ISignalHook SignalHook => _signalHook;
     private ISignalHook _signalHook;
-
+    private Bounds _bounds;
     private void Awake()
     {
         _signalHook = GetComponentInChildren<ISignalHook>();
@@ -24,6 +24,13 @@ public class LayerView : MonoBehaviour
         //pass along the init
         _signalHook?.SetComponenSystem(componentSystem);
         Disable();
+        
+        //create bounding box.
+        _bounds = new Bounds();
+        foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+        {
+            _bounds.Encapsulate(mr.bounds);
+        }
     }
 
     void Enable()
@@ -56,5 +63,13 @@ public class LayerView : MonoBehaviour
         {
             Disable();
         }
+    }
+
+    private void Update()
+    {
+        //basically i want to do frustum culling - type math to check the bounds against the camera to decide if we should switch our view automatically or not.
+        //this will just be for flyaround, but I would want to consider non-automatic versions of this for VR.
+        //https://gamedev.stackexchange.com/questions/77579/determine-percentage-of-screen-covered-by-an-object-without-using-frustum-cullin
+        //https://bruop.github.io/frustum_culling/
     }
 }
