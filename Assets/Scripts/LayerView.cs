@@ -13,14 +13,14 @@ public class LayerView : MonoBehaviour
     private ISignalHook _signalHook;
     private Bounds _bounds;
 
-    public void Init(ComponentSystem componentSystem)
+    //Setup gets called by the ComponentSystem once on all layers during init.
+    public void Setup(ComponentSystem componentSystem)
     {
         _enabled = false;
         _container = componentSystem;
         //pass along the init
         _signalHook = GetComponent<ISignalHook>();
         _signalHook?.SetComponenSystem(componentSystem);
-        Disable();
         
         //create bounding box.
         _bounds = new Bounds();

@@ -7,10 +7,11 @@ namespace Zoompy
 	{
 		public Action<int,byte> OnInputChange; 
 		public ComponentSystem ConnectedTo;
-		public byte _data;
+		public byte Data => _data;
+		[SerializeField] byte _data;
 		public int ConnectedIndex;
 
-		private void Start()
+		public void Setup()
 		{
 			_data = 0;
 		}
@@ -48,6 +49,7 @@ namespace Zoompy
 				OnInputChange?.Invoke(ConnectedIndex,_data);
 			}
 		}
+
 
 		
 	}

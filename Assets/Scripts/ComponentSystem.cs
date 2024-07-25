@@ -27,7 +27,17 @@ namespace Zoompy
             //init
             foreach (var layer in children)
             {
-                layer.Init(this);
+                layer.Setup(this);
+            }
+
+            foreach (var input in _inputs)
+            {
+                input.Setup();
+            }
+
+            foreach (var output in _outputs)
+            {
+                output.Setup();
             }
         }
 

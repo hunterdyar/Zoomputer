@@ -22,9 +22,11 @@ namespace Zoompy
 			if (_port != null)
 			{
 				_port.OnInputChange += OnInputChange;
+				SetMaterialByData(_port.Data);
 			}else if (_wire != null)
 			{
 				_wire.From.OnInputChange += OnInputChange;
+				SetMaterialByData(_wire.From.Data);
 			}
 		}
 
@@ -41,6 +43,11 @@ namespace Zoompy
 		}
 
 		private void OnInputChange(int index, byte data)
+		{
+			SetMaterialByData(data);
+		}
+
+		private void SetMaterialByData(byte data)
 		{
 			if (data == 0)
 			{
