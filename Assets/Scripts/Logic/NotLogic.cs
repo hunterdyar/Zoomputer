@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,11 +19,14 @@ public class NotLogic : MonoBehaviour, ISignalHook
     public void OnAnyInputChange()
     {
         //loop through all connections and match the same output
-        _parent.Outputs[0].SetSignal(_parent.Inputs[0].GetSignal());
+        _parent.Outputs[0].SetSignal(_parent.Inputs[0].GetSignal()==false);
     }
 
     public void OnInputChange(int index, byte data)
     {
-        _parent.Outputs[index].SetSignal(data == 0);
+        if (_parent != null)
+        {
+            _parent.Outputs[index].SetSignal(data == 0);
+        }
     }
 }

@@ -12,16 +12,13 @@ public class LayerView : MonoBehaviour
     public ISignalHook SignalHook => _signalHook;
     private ISignalHook _signalHook;
     private Bounds _bounds;
-    private void Awake()
-    {
-        _signalHook = GetComponentInChildren<ISignalHook>();
-    }
 
     public void Init(ComponentSystem componentSystem)
     {
         _enabled = false;
         _container = componentSystem;
         //pass along the init
+        _signalHook = GetComponent<ISignalHook>();
         _signalHook?.SetComponenSystem(componentSystem);
         Disable();
         

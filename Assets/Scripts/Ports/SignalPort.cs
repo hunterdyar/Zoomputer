@@ -7,18 +7,22 @@ namespace Zoompy
 	{
 		public Action<int,byte> OnInputChange; 
 		public ComponentSystem ConnectedTo;
-		private byte _data;
+		public byte _data;
 		public int ConnectedIndex;
 
 		private void Start()
 		{
 			_data = 0;
-			OnInputChange?.Invoke(ConnectedIndex,_data);
 		}
 
 		public bool GetSignal()
 		{
 			return _data != 0;
+		}
+
+		public void Refresh()
+		{
+			OnInputChange?.Invoke(ConnectedIndex, _data);
 		}
 
 		public void SetSignal(bool data)

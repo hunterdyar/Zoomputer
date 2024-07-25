@@ -11,6 +11,7 @@ namespace Zoompy
 		private void OnEnable()
 		{
 			From.OnInputChange+= OnInputChange;
+			To.SetSignalByte(From.GetSignalByte());
 		}
 
 		private void OnDisable()
