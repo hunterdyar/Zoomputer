@@ -17,6 +17,8 @@ namespace Zoompy
         [SerializeField] private SignalPort[] _inputs;
 
         public SignalPort[] Outputs => _outputs;
+        public LayerView ActiveLayer => children[_currentView];
+
         [SerializeField] private SignalPort[] _outputs;
         
         private int _currentView = -1;

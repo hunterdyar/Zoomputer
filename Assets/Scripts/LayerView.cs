@@ -7,10 +7,12 @@ using Zoompy.Logic;
 
 public class LayerView : MonoBehaviour
 {
+    public ComponentSystem ComponentSystem => _container;
     private ComponentSystem _container;
     private bool _enabled;
     public ISignalHook SignalHook => _signalHook;
     private ISignalHook _signalHook;
+    public Bounds Bounds => _bounds; 
     private Bounds _bounds;
 
     //Setup gets called by the ComponentSystem once on all layers during init.
