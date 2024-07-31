@@ -1308,6 +1308,16 @@ PrefabInstance:
       propertyPath: From
       value: 
       objectReference: {fileID: 169602072}
+    - target: {fileID: 2437324435973891659, guid: 78793e628e0eda64795c3a4bb216ad4c,
+        type: 3}
+      propertyPath: m_Capped
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2437324435973891659, guid: 78793e628e0eda64795c3a4bb216ad4c,
+        type: 3}
+      propertyPath: m_RebuildOnSplineChange
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6947237311476676179, guid: 78793e628e0eda64795c3a4bb216ad4c,
         type: 3}
       propertyPath: m_Name
