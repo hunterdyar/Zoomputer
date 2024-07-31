@@ -11,6 +11,9 @@ namespace Zoompy
     /// </summary>
     public class ComponentSystem : MonoBehaviour
     {
+        public string DisplayName => _name;
+        [SerializeField] private string _name;
+
         public SignalPort[] Inputs => _inputs;
 
         [Header("Connections")]

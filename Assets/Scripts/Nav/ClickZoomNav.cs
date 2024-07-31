@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,7 +13,15 @@ public class ClickZoomNav : MonoBehaviour
     [SerializeField] private LayerMask _layerViewLayer;
     private RaycastHit _hitInfo;
     private Stack<ComponentSystem> _breadcrumbs = new Stack<ComponentSystem>();
-   
+    
+    //HUD
+    [SerializeField] private UIDocument _currentSystemDoc;
+    private Label _currentLabel;
+    private void Start()
+    {
+        _currentLabel = _currentSystemDoc.rootVisualElement.Q<Label>("current");
+        RefreshUI();
+    }
 
     // Update is called once per frame
     void Update()
@@ -40,7 +49,7 @@ public class ClickZoomNav : MonoBehaviour
         _breadcrumbs.Push(view.ComponentSystem);
         view.ComponentSystem.ZoomIn();
         CameraControl.FrameBoundingBox(view.ComponentSystem.ActiveLayer.Bounds);
-
+        RefreshUI();
         //move the camera to this position.
     }
 
@@ -50,6 +59,7 @@ public class ClickZoomNav : MonoBehaviour
         {
             var container = _breadcrumbs.Pop();
             container.ZoomOut();
+            RefreshUI();
             //peek the new top and move the camera to that.
         }
         else
@@ -58,7 +68,19 @@ public class ClickZoomNav : MonoBehaviour
             CameraControl.MoveToStartPosition();
         }
     }
-    
+
+    private void RefreshUI()
+    {
+        if (_breadcrumbs.Count == 0)
+        {
+            _currentLabel.text = "Full System";
+        }
+        else
+        {
+            _currentLabel.text = _breadcrumbs.Peek().DisplayName;
+        }
+    }
+
 
     bool DidClickOnLayer(out LayerView view)
     {
