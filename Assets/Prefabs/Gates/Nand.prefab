@@ -1017,8 +1017,8 @@ MonoBehaviour:
   - {fileID: 8950125177883698852}
   _outputs:
   - {fileID: 1439731451218139581}
-  children:
-  - {fileID: 1495926073697656806}
+  outsideView: {fileID: 1495926073697656806}
+  insideView: {fileID: 0}
 --- !u!1 &8514164484663001137
 GameObject:
   m_ObjectHideFlags: 0

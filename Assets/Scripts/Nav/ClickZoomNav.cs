@@ -30,7 +30,7 @@ public class ClickZoomNav : MonoBehaviour
         {
             if (DidClickOnLayer(out var view))
             {
-                ZoomTo(view);
+                ZoomInto(view.ComponentSystem);
             }
         }
         else
@@ -43,13 +43,20 @@ public class ClickZoomNav : MonoBehaviour
         
     }
 
-    private void ZoomTo(LayerView view)
+    private void ZoomInto(ComponentSystem system)
     {
         //check if this is a valid (nested) thing to zoom into.
-        _breadcrumbs.Push(view.ComponentSystem);
-        view.ComponentSystem.ZoomIn();
-        CameraControl.FrameBoundingBox(view.ComponentSystem.ActiveLayer.Bounds);
-        RefreshUI();
+        if (!system.IsLeaf)
+        {
+            _breadcrumbs.Push(system);
+            system.EnterSystem();
+            CameraControl.FrameBoundingBox(system.insideView.Bounds);
+            RefreshUI();
+        }
+        else
+        {
+            //Can't enter leaf node (lowest layer)
+        }
         //move the camera to this position.
     }
 
@@ -58,15 +65,19 @@ public class ClickZoomNav : MonoBehaviour
         if (_breadcrumbs.Count > 0)
         {
             var container = _breadcrumbs.Pop();
-            container.ZoomOut();
+            container.ExitSystem();
             RefreshUI();
             //peek the new top and move the camera to that.
+            if (_breadcrumbs.Count > 0)
+            {
+                var top = _breadcrumbs.Peek();
+                CameraControl.FrameBoundingBox(top.insideView.Bounds);
+                RefreshUI();
+            }
         }
-        else
-        {
-            //ehhhh its fine for now. 
-            CameraControl.MoveToStartPosition();
-        }
+  
+
+        CameraControl.MoveToStartPosition();
     }
 
     private void RefreshUI()

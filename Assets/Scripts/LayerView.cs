@@ -9,6 +9,7 @@ public class LayerView : MonoBehaviour
 {
     public ComponentSystem ComponentSystem => _container;
     private ComponentSystem _container;
+    public bool IsEnabled => _enabled;
     private bool _enabled;
     public ISignalHook SignalHook => _signalHook;
     private ISignalHook _signalHook;

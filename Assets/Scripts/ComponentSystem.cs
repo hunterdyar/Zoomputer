@@ -13,27 +13,27 @@ namespace Zoompy
     {
         public string DisplayName => _name;
         [SerializeField] private string _name;
-
+        
+        public bool IsLeaf { get; private set; } 
         public SignalPort[] Inputs => _inputs;
 
         [Header("Connections")]
         [SerializeField] private SignalPort[] _inputs;
 
         public SignalPort[] Outputs => _outputs;
-        public LayerView ActiveLayer => children[_currentView];
 
         [SerializeField] private SignalPort[] _outputs;
         
         private int _currentView = -1;
-        [Header("System")] [SerializeField] private LayerView[] children;
 
+        public LayerView outsideView;
+        public LayerView insideView;
+        
         private void Awake()
         {
-            //init
-            foreach (var layer in children)
-            {
-                layer.Setup(this);
-            }
+            outsideView.Setup(this);
+            IsLeaf = insideView == null;
+            insideView?.Setup(this);
 
             foreach (var input in _inputs)
             {
@@ -60,12 +60,15 @@ namespace Zoompy
                 input.ConnectedTo = this;
                 input.ConnectedIndex = i;
             }
-            SetView(0);
+            outsideView.SetLayerEnabled(true);
+            if (!IsLeaf)
+            {
+                insideView.SetLayerEnabled(false);
+            }
         }
 
         private void OnEnable()
         {
-           
             foreach (var input in _inputs)
             {
                 input.OnInputChange += OnInputChange;
@@ -80,41 +83,29 @@ namespace Zoompy
             }
         }
 
-        public void ZoomIn()
+        public void EnterSystem()
         {
-            var zoom = _currentView+1;
-            if (zoom < children.Length)
+            if (!IsLeaf)
             {
-                SetView(zoom);
-            }
-        }
-
-        public void ZoomOut()
-        {
-            var zoom = _currentView - 1;
-            if (zoom >=0)
-            {
-                SetView(zoom);
-            }
-        }
-        private void SetView(int viewIndex)
-        {
-            if (_currentView == viewIndex)
-            {
-                return;
-            }
-            _currentView = viewIndex;
-            if (viewIndex >= 0 && viewIndex < children.Length)
-            {
-                for (var i = 0; i < children.Length; i++)
+                outsideView.SetLayerEnabled(false);
+                insideView.SetLayerEnabled(true);
+                foreach (var input in _inputs)
                 {
-                    children[i].SetLayerEnabled(viewIndex == i);
+                    input.Refresh();
                 }
             }
+        }
 
-            foreach (var input in _inputs)
+        public void ExitSystem()
+        {
+            if (!IsLeaf)
             {
-                input.Refresh();
+                outsideView.SetLayerEnabled(true);
+                insideView.SetLayerEnabled(false);
+                foreach (var input in _inputs)
+                {
+                    input.Refresh();
+                }
             }
         }
 
@@ -124,23 +115,24 @@ namespace Zoompy
             {
                 return;
             }
-            //what's a good way to get an index?
-            //indexof is.. odd?
-            if (_currentView < 0 || _currentView >= children.Length)
-            {
-                Debug.LogError($"Bad Current View: {_currentView}. There are {children.Length} layers.",this);
-                return;
-            }
-            var sh = children[_currentView].SignalHook;
-            if (sh != null)
-            {
-                sh.OnInputChange(index,data);
-            }
-        }
 
-        void Refresh()
-        {
-            
+            if (outsideView.IsEnabled)
+            {
+                var sh = outsideView.SignalHook;
+                if (sh != null)
+                {
+                    sh.OnInputChange(index, data);
+                }
+            }
+
+            if (insideView.IsEnabled)
+            {
+                var sh = insideView.SignalHook;
+                if (sh != null)
+                {
+                    sh.OnInputChange(index, data);
+                }
+            }
         }
     }
 
