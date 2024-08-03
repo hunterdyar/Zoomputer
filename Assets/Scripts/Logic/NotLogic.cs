@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zoompy;
-using Zoompy.Logic;
+using Zoompy.LogicImplementations;
 
+[Logic]
 public class NotLogic : MonoBehaviour, ISignalHook
 {
     private ComponentSystem _parent;

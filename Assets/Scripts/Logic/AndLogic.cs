@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using Zoompy.ComponentGenerator;
 
-namespace Zoompy.Logic
+namespace Zoompy.LogicImplementations
 {
+	[Logic]
 	public class AndLogic : MonoBehaviour, ISignalHook
 	{
 		private ComponentSystem _parent;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zoompy.LogicImplementations;
 
 namespace Zoompy
 {
@@ -14,7 +15,12 @@ namespace Zoompy
         public string DisplayName => _name;
         [SerializeField] private string _name;
         
-        public bool IsLeaf { get; private set; } 
+        public bool IsLeaf { get; private set; }
+
+        private bool _viewingInside = false;
+        public ISignalHook BaseLogic => _baseLogic;
+        private ISignalHook _baseLogic;
+        
         public SignalPort[] Inputs => _inputs;
 
         [Header("Connections")]
@@ -31,10 +37,14 @@ namespace Zoompy
         
         private void Awake()
         {
+            _baseLogic = GetComponent<ISignalHook>();
+            _baseLogic?.SetComponenSystem(this);
+            
             outsideView.Setup(this);
             IsLeaf = insideView == null;
             insideView?.Setup(this);
 
+            _viewingInside = false;
             foreach (var input in _inputs)
             {
                 input.Setup();
@@ -87,6 +97,7 @@ namespace Zoompy
         {
             if (!IsLeaf)
             {
+                _viewingInside = true;
                 outsideView.SetLayerEnabled(false);
                 insideView.SetLayerEnabled(true);
                 foreach (var input in _inputs)
@@ -100,6 +111,7 @@ namespace Zoompy
         {
             if (!IsLeaf)
             {
+                _viewingInside = false;
                 outsideView.SetLayerEnabled(true);
                 insideView.SetLayerEnabled(false);
                 foreach (var input in _inputs)
@@ -116,24 +128,10 @@ namespace Zoompy
                 return;
             }
 
-            if (outsideView.IsEnabled)
+            if (!_viewingInside || IsLeaf)
             {
-                var sh = outsideView.SignalHook;
-                if (sh != null)
-                {
-                    sh.OnInputChange(index, data);
-                }
-            }
-
-            if (insideView.IsEnabled)
-            {
-                var sh = insideView.SignalHook;
-                if (sh != null)
-                {
-                    sh.OnInputChange(index, data);
-                }
+                 _baseLogic.OnInputChange(index, data);
             }
         }
     }
-
 }

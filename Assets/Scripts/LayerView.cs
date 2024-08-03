@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zoompy;
-using Zoompy.Logic;
+using Zoompy.LogicImplementations;
 
 public class LayerView : MonoBehaviour
 {
@@ -11,8 +11,6 @@ public class LayerView : MonoBehaviour
     private ComponentSystem _container;
     public bool IsEnabled => _enabled;
     private bool _enabled;
-    public ISignalHook SignalHook => _signalHook;
-    private ISignalHook _signalHook;
     public Bounds Bounds => _bounds; 
     private Bounds _bounds;
 
@@ -22,8 +20,7 @@ public class LayerView : MonoBehaviour
         _enabled = false;
         _container = componentSystem;
         //pass along the init
-        _signalHook = GetComponent<ISignalHook>();
-        _signalHook?.SetComponenSystem(componentSystem);
+      
         
         //create bounding box.
         _bounds = new Bounds();

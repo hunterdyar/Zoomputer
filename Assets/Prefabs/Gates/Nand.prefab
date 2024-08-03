@@ -846,7 +846,6 @@ GameObject:
   - component: {fileID: 152150680764733288}
   - component: {fileID: 1495926073697656806}
   - component: {fileID: 9107788802258579098}
-  - component: {fileID: 924042118842774728}
   m_Layer: 6
   m_Name: Container View
   m_TagString: Untagged
@@ -904,18 +903,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.58958954, y: 0.22441483, z: 0.21933809}
   m_Center: {x: -0.01238659, y: -0.0023835748, z: 0.038373545}
---- !u!114 &924042118842774728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7598209667367345629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e0b76d6fe4b46e69e109f022c8c4ab5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7642100680122586973
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +961,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6691410088118334812}
   - component: {fileID: 4403796067047273481}
+  - component: {fileID: 458786044625811953}
   m_Layer: 0
   m_Name: Nand
   m_TagString: Untagged
@@ -1019,6 +1007,18 @@ MonoBehaviour:
   - {fileID: 1439731451218139581}
   outsideView: {fileID: 1495926073697656806}
   insideView: {fileID: 0}
+--- !u!114 &458786044625811953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7967701799250812150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e0b76d6fe4b46e69e109f022c8c4ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8514164484663001137
 GameObject:
   m_ObjectHideFlags: 0

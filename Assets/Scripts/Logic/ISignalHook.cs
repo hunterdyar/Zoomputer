@@ -1,4 +1,4 @@
-﻿namespace Zoompy.Logic
+﻿namespace Zoompy
 {
 	public interface ISignalHook
 	{
