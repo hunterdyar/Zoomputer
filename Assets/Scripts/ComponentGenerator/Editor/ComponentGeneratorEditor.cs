@@ -7,16 +7,19 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Zoompy;
-using Zoompy.ComponentGenerator;
 using Zoompy.Extensions;
-using Zoompy.LogicImplementations;
 
-[CustomEditor(typeof(ComponentGenerator))]
+[CustomEditor(typeof(Zoompy.ComponentGenerator.ComponentGenerator))]
 public class ComponentGeneratorEditor : Editor
 {
 	public override VisualElement CreateInspectorGUI()
 	{
 		VisualElement container = new VisualElement();
+
+		container.Add(new Label("Settings Reference"));
+		var genSettingsProperty = serializedObject.FindProperty("_genSettings");
+		var genSettingsElements = new PropertyField(genSettingsProperty);
+		container.Add(genSettingsElements);
 		
 		container.Add(new Label("Inputs"));
 
@@ -38,26 +41,26 @@ public class ComponentGeneratorEditor : Editor
 			//no correct name set yet.
 			index = 0;
 		}
-		var logicNameDropdown = new DropdownField(props,index, StripLogicSuffix,StripLogicSuffix);
+		
+		
+		var logicNameDropdown = new DropdownField(props,index,
+			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix,
+			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix);
 		logicNameDropdown.RegisterValueChangedCallback(e =>
 		{	
-			((ComponentGenerator)target).baseLogicClassName = e.newValue;
+			((Zoompy.ComponentGenerator.ComponentGenerator)target).baseLogicClassName = e.newValue;
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);
-	
 
+		
+		//material
+		container.Add(new Label("Visuals"));
+		var overrideMatProperty = serializedObject.FindProperty("_overrideContainerMaterial");
+		var overrideMatElements = new PropertyField(overrideMatProperty);
+		container.Add(overrideMatElements);
+		
 		return container;
-	}
-
-	private string StripLogicSuffix(string s)
-	{
-		if (s.Substring(s.Length - 5, 5) == "Logic")
-		{
-			return s.Remove(s.Length - 5);
-		}
-
-		return s;
 	}
 
 	private IEnumerable<Type> GetSignalHookImplementors()

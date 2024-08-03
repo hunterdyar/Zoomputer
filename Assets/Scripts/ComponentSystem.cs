@@ -93,6 +93,24 @@ namespace Zoompy
             }
         }
 
+        public void SetDisplayName(string newName)
+        {
+            _name = newName;
+        }
+
+        public void SetPorts(SignalPort[] ports, PortType portType)
+        {
+            switch (portType)
+            {
+                case PortType.Input:
+                    _inputs = ports;
+                    break;
+                case PortType.Output:
+                    _outputs = ports;
+                    break;
+            }
+        }
+
         public void EnterSystem()
         {
             if (!IsLeaf)

@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberInputs: 1
   numberOutputs: 1
-  baseLogicClassName: 
+  baseLogicClassName: NotLogic
+  _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
+  _overrideContainerMaterial: {fileID: 0}
