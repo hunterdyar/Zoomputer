@@ -42,7 +42,6 @@ public class ComponentGeneratorEditor : Editor
 			index = 0;
 		}
 		
-		
 		var logicNameDropdown = new DropdownField(props,index,
 			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix,
 			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix);
