@@ -34,16 +34,15 @@ namespace Zoompy.Generator.Editor.SystemGraph
 
 		private void OnEnable()
 		{
-			ConstructGraphView();
+			if (_currentComponentContainer != null)
+			{
+				ConstructGraphView();
+			}
+
 			GenerateToolbar();
 			Load();               
 		}
-
-		private void OnDisable()
-		{
-			rootVisualElement.Remove(_graphView);
-		}
-
+		
 		private void GenerateToolbar()
 		{
 			_toolbar = new Toolbar();
@@ -72,6 +71,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			if (_currentComponentContainer != null)
 			{
 				_systemNameLabel.text = _currentComponentContainer.name;
+				ConstructGraphView();
 			}
 		}
 		void Save()
@@ -81,7 +81,11 @@ namespace Zoompy.Generator.Editor.SystemGraph
 
 		private void ConstructGraphView()
 		{
-			_graphView = new SystemGraphView(this);
+			if (_graphView != null)
+			{
+				rootVisualElement.Remove(_graphView);
+			}
+			_graphView = new SystemGraphView(_currentComponentContainer,this);
 			rootVisualElement.Add(_graphView);
 			_graphView.StretchToParentSize();
 			_graphView.style.width = new StyleLength(Length.Percent(100));

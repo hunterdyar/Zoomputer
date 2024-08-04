@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
 namespace Zoompy.Generator.Editor.SystemGraph
@@ -12,13 +14,21 @@ namespace Zoompy.Generator.Editor.SystemGraph
 	{
 		private SystemGraphEditor _editor;
 		private string styleName = "";
+
+		private NodeSearchWindow _searchWindow;
+		public ComponentGenerator ComponentGenerator => _systemParent;
         ComponentGenerator _systemParent;
         public SystemDescription System;
     
-        public SystemGraphView(SystemGraphEditor graphEditorWindow)
+        public SystemGraphView(ComponentGenerator parent, SystemGraphEditor graphEditorWindow)
         {
 	        _editor = graphEditorWindow;
-
+	        if (parent == null)
+	        {
+		        Debug.LogWarning("fuck");
+	        }
+	        
+	        _systemParent = parent;
 	        if (!string.IsNullOrEmpty(styleName))
 	        {
 		        StyleSheet style = Resources.Load<StyleSheet>(styleName);
@@ -37,8 +47,41 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			Insert(0,grid);
 			grid.StretchToParentSize();
 
+			AddSearchWindow();
 			// StyleSheet styleSheet = PackageSaveAssetLoading.GetUSSAsset();
 			// styleSheets.Add(styleSheet);
+			AddNodes();
         }
+
+        private void AddSearchWindow()
+        {
+	        _searchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+	        _searchWindow.Configure(_editor,this);
+	        nodeCreationRequest = context =>
+		        SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
+	        
+        }
+        void AddNodes()
+        {
+	        if (_systemParent == null)
+	        {
+		        return;
+	        }
+	        
+
+	        var node = new SystemInputNodeView(ComponentGenerator);
+	        AddElement(node);
+
+	        var outnode = new SystemOutputNodeView(ComponentGenerator);
+	        AddElement(outnode);
+	       
+
+        }
+
+        public SystemNodeView CreateSystemNodeView(Vector2 pos)
+        {
+	        var node = new SystemNodeView(pos, ComponentGenerator);
+	        return node;
+        }       
 	}
 }

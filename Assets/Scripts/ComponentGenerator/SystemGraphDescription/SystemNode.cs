@@ -8,5 +8,6 @@ namespace Zoompy.Generator
 		public string NodeID;
 		public Zoompy.Generator.ComponentGenerator System;
 		public Vector2 Position;
+		public Vector2 Size;
 	}
 }
