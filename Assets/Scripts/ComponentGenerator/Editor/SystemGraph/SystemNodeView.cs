@@ -1,10 +1,13 @@
-﻿using UnityEditor.Experimental.GraphView;
+﻿using System.Runtime.CompilerServices;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Zoompy.Generator.Editor.SystemGraph
 {
 	public class SystemNodeView : BaseNodeView
 	{
+
+		public SystemNode SystemNode => _systemNode;
 		private SystemNode _systemNode;
 
 		public SystemNodeView(SystemNode node, ComponentGenerator parent) : base(parent)
@@ -17,7 +20,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 		{
 			this.title = _systemNode.System.name;
 			this.name = _systemNode.System.name;
-			
+			this.SetID(_systemNode.NodeID);
 			SetPosition(new Rect(_systemNode.Position, _systemNode.Size));
 
 			CreateInputPorts();
@@ -25,6 +28,14 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			RefreshExpandedState();
 			RefreshPorts();
 		}
+
+		public override void PreSaveDataPopulate()
+		{
+			var pos = GetPosition();
+			_systemNode.Position = pos.position;
+			_systemNode.Size = pos.size;
+		}
+
 		private void CreateInputPorts()
 		{
 			for (int i = 0; i < _systemNode.System.numberInputs; i++)
@@ -41,5 +52,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			}
 
 		}
+		
+		
 	}
 }

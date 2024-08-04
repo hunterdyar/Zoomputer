@@ -18,5 +18,47 @@ MonoBehaviour:
   _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
   _overrideContainerMaterial: {fileID: 0}
   InnerSystem:
-    Nodes: []
-    Edges: []
+    Input: 7a5de4fe587bb36408ea439cd5569c1b
+    InputPos:
+      serializedVersion: 2
+      x: 33
+      y: 172
+      width: 82
+      height: 77
+    Output: 554c82990d79a9b468b688f4afc68227
+    OutputPos:
+      serializedVersion: 2
+      x: 716
+      y: 184
+      width: 92
+      height: 77
+    Nodes:
+    - NodeID: 109fd32a-38b8-4af8-813a-42995fa272b6
+      System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
+      Position: {x: 458, y: 199}
+      Size: {x: 121, y: 101}
+    - NodeID: f975b65b-f4d3-465e-a6e2-ffeeb2ac59e5
+      System: {fileID: 11400000, guid: b85f1f7ce1199434c9f7aaf79043eb1b, type: 2}
+      Position: {x: 201, y: 122}
+      Size: {x: 121, y: 101}
+    Edges:
+    - FromNode: f975b65b-f4d3-465e-a6e2-ffeeb2ac59e5
+      FromIndex: 0
+      ToNode: 109fd32a-38b8-4af8-813a-42995fa272b6
+      ToIndex: 0
+    - FromNode: f975b65b-f4d3-465e-a6e2-ffeeb2ac59e5
+      FromIndex: 0
+      ToNode: 109fd32a-38b8-4af8-813a-42995fa272b6
+      ToIndex: 1
+    - FromNode: 109fd32a-38b8-4af8-813a-42995fa272b6
+      FromIndex: 0
+      ToNode: 554c82990d79a9b468b688f4afc68227
+      ToIndex: 0
+    - FromNode: 7a5de4fe587bb36408ea439cd5569c1b
+      FromIndex: 0
+      ToNode: f975b65b-f4d3-465e-a6e2-ffeeb2ac59e5
+      ToIndex: 0
+    - FromNode: 7a5de4fe587bb36408ea439cd5569c1b
+      FromIndex: 0
+      ToNode: f975b65b-f4d3-465e-a6e2-ffeeb2ac59e5
+      ToIndex: 1

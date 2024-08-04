@@ -4,7 +4,6 @@ namespace Zoompy.Generator.Editor.SystemGraph
 {
 	public class SystemInputNodeView : BaseNodeView
 	{
-		private ComponentGenerator _parent;
 		private Port[] _ports;
 		public SystemInputNodeView(ComponentGenerator parent) : base(parent)
 		{
@@ -24,5 +23,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			RefreshExpandedState();
 			RefreshPorts();
 		}
+
+		
 	}
 }

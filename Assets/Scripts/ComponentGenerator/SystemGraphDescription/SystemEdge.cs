@@ -5,9 +5,10 @@ namespace Zoompy.Generator
 	[System.Serializable]
 	public class SystemEdge 
 	{
-		public string InputNode;
-		public int InputIndex;
-		public string OutputNode;
-		public int OutputIndex;
+		//todo: this could be references to SystemNode instead of GUIDs.
+		public string FromNode;
+		public int FromIndex;
+		public string ToNode;
+		public int ToIndex;
 	}
 }

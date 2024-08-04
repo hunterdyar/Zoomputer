@@ -7,6 +7,8 @@ namespace Zoompy.Generator.Editor.SystemGraph
 {
 	public class BaseNodeView : UnityEditor.Experimental.GraphView.Node
     {
+        public int Index => _index;
+        protected int _index = 0;
         public string Guid => guid;
         protected string guid;
         
@@ -23,12 +25,14 @@ namespace Zoompy.Generator.Editor.SystemGraph
             // style.left = node.position.x;
             // style.top = node.position.y;
             guid = GUID.Generate().ToString();
+            this.viewDataKey = guid;
         }
 
         public Port AddPort(string name, Direction nodeDir, Port.Capacity capacity = Port.Capacity.Single)
         {
              var port = InstantiatePort(Orientation.Horizontal, nodeDir, capacity, typeof(byte));
              port.name = name;
+            // port.title = name;
              if (nodeDir == Direction.Output)
              {
                  outputContainer.Add(port);
@@ -47,10 +51,20 @@ namespace Zoompy.Generator.Editor.SystemGraph
             //node.position = newPos.position;
         }
 
+        public virtual void PreSaveDataPopulate()
+        {
+            
+        }
+
         public override void OnSelected()
         {
             base.OnSelected();
             OnNodeSelected?.Invoke(this);
+        }
+
+        public void SetID(string g)
+        {
+            this.guid = g;
         }
 	}
 }

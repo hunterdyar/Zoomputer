@@ -12,6 +12,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 		private ComponentGenerator _currentComponentContainer;
 		private SystemGraphView _graphView;
 
+		public SystemGraphSaveLoad saveLoad;
 		//toolbar
 		private Toolbar _toolbar;
 		private Label _systemNameLabel;
@@ -72,11 +73,15 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			{
 				_systemNameLabel.text = _currentComponentContainer.name;
 				ConstructGraphView();
+				saveLoad = new SystemGraphSaveLoad(this, _graphView);
 			}
 		}
 		void Save()
 		{
-			// _currentComponentContainer.
+			if (_currentComponentContainer != null)
+			{
+				saveLoad.Save(_currentComponentContainer);
+			}
 		}
 
 		private void ConstructGraphView()
@@ -90,6 +95,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			_graphView.StretchToParentSize();
 			_graphView.style.width = new StyleLength(Length.Percent(100));
 			_graphView.style.height = new StyleLength(Length.Percent(100));
+			_graphView.style.top = new StyleLength(new Length(16));
 		}
 		
 	}

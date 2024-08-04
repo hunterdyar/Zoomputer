@@ -50,13 +50,17 @@ public class ComponentGeneratorEditor : Editor
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);
-
 		
 		//material
 		container.Add(new Label("Visuals"));
 		var overrideMatProperty = serializedObject.FindProperty("_overrideContainerMaterial");
 		var overrideMatElements = new PropertyField(overrideMatProperty);
 		container.Add(overrideMatElements);
+
+		container.Add(new Label("Debug"));
+		var innerSystemProp = serializedObject.FindProperty("InnerSystem");
+		var innserSystemElement = new PropertyField(innerSystemProp);
+		container.Add(innserSystemElement);
 		
 		return container;
 	}

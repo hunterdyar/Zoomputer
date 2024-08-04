@@ -6,7 +6,7 @@ namespace Zoompy.Generator
 	public class SystemNode 
 	{
 		public string NodeID;
-		public Zoompy.Generator.ComponentGenerator System;
+		public ComponentGenerator System;
 		public Vector2 Position;
 		public Vector2 Size;
 	}
