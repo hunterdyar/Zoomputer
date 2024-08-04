@@ -57,10 +57,10 @@ public class ComponentGeneratorEditor : Editor
 		var overrideMatElements = new PropertyField(overrideMatProperty);
 		container.Add(overrideMatElements);
 
-		container.Add(new Label("Debug"));
-		var innerSystemProp = serializedObject.FindProperty("InnerSystem");
-		var innserSystemElement = new PropertyField(innerSystemProp);
-		container.Add(innserSystemElement);
+		// container.Add(new Label("Debug"));
+		 var innerSystemProp = serializedObject.FindProperty("InnerSystem");
+		// var innserSystemElement = new PropertyField(innerSystemProp);
+		// container.Add(innserSystemElement);
 		
 		return container;
 	}

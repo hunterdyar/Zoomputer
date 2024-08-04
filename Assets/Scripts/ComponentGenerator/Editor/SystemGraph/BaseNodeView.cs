@@ -32,6 +32,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
         {
              var port = InstantiatePort(Orientation.Horizontal, nodeDir, capacity, typeof(byte));
              port.name = name;
+             port.portName = name;
             // port.title = name;
              if (nodeDir == Direction.Output)
              {

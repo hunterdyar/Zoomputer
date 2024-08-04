@@ -18,6 +18,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 
 		private void Init()
 		{
+			this.capabilities = this.capabilities & ~Capabilities.Collapsible;
 			this.title = _systemNode.System.name;
 			this.name = _systemNode.System.name;
 			this.SetID(_systemNode.NodeID);
