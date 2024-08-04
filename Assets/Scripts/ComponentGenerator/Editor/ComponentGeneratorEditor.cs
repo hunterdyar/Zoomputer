@@ -8,8 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Zoompy;
 using Zoompy.Extensions;
-
-[CustomEditor(typeof(Zoompy.ComponentGenerator.ComponentGenerator))]
+[CustomEditor(typeof(Zoompy.Generator.ComponentGenerator))]
 public class ComponentGeneratorEditor : Editor
 {
 	public override VisualElement CreateInspectorGUI()
@@ -43,11 +42,11 @@ public class ComponentGeneratorEditor : Editor
 		}
 		
 		var logicNameDropdown = new DropdownField(props,index,
-			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix,
-			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix);
+			Zoompy.Generator.ComponentGenerator.StripLogicSuffix,
+			Zoompy.Generator.ComponentGenerator.StripLogicSuffix);
 		logicNameDropdown.RegisterValueChangedCallback(e =>
 		{	
-			((Zoompy.ComponentGenerator.ComponentGenerator)target).baseLogicClassName = e.newValue;
+			((Zoompy.Generator.ComponentGenerator)target).baseLogicClassName = e.newValue;
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);

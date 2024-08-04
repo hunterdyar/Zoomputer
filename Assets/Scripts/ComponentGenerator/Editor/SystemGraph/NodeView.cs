@@ -2,7 +2,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace ComponentGenerator.Editor.SystemGraph
+namespace Zoompy.Generator.Editor.SystemGraph
 {
 	public class NodeView : UnityEditor.Experimental.GraphView.Node
 	{
@@ -26,10 +26,8 @@ namespace ComponentGenerator.Editor.SystemGraph
         }
         private void CreateInputPorts()
         {
-            
             input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
-
-
+            
             if (input != null)
             {
                 input.portName = "In";

@@ -4,7 +4,7 @@ using ComponentGenerator;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Zoompy.ComponentGenerator
+namespace Zoompy.Generator
 {
 	[CreateAssetMenu(fileName = "Gneratore", menuName = "Component/Generator", order = 0)]
 	public class ComponentGenerator : ScriptableObject
@@ -26,6 +26,8 @@ namespace Zoompy.ComponentGenerator
 
 		private int MaxPorts => numberInputs > numberOutputs ? numberInputs : numberOutputs;
 		private float Height() => _genSettings.containerMargin* 2 + MaxPorts* _genSettings.PortSize + (MaxPorts* _genSettings.portgap);
+
+		public SystemDescription InnerSystem;
 		
 		[ContextMenu("Generate")]
 		private void Gen()
