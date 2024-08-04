@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
+  m_Name: And
+  m_EditorClassIdentifier: 
+  numberInputs: 2
+  numberOutputs: 1
+  baseLogicClassName: NotLogic
+  _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
+  _overrideContainerMaterial: {fileID: 0}
+  InnerSystem:
+    Nodes: []
+    Edges: []

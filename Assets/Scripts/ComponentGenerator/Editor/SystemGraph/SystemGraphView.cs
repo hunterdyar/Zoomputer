@@ -48,8 +48,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			grid.StretchToParentSize();
 
 			AddSearchWindow();
-			// StyleSheet styleSheet = PackageSaveAssetLoading.GetUSSAsset();
-			// styleSheets.Add(styleSheet);
+			
 			AddNodes();
         }
 
@@ -67,21 +66,40 @@ namespace Zoompy.Generator.Editor.SystemGraph
 	        {
 		        return;
 	        }
-	        
 
-	        var node = new SystemInputNodeView(ComponentGenerator);
-	        AddElement(node);
+	        var inputs = new SystemInputNodeView(ComponentGenerator);
+	        AddElement(inputs);
 
-	        var outnode = new SystemOutputNodeView(ComponentGenerator);
-	        AddElement(outnode);
-	       
+	        var outputs = new SystemOutputNodeView(ComponentGenerator);
+	        AddElement(outputs);
+
+	        foreach (var sNode in _systemParent.InnerSystem.Nodes)
+	        {
+		        var node = RecreateSystemNodeView(sNode);
+	        }
 
         }
 
-        public SystemNodeView CreateSystemNodeView(Vector2 pos)
+        public SystemNodeView CreateNewSystemNodeView(Vector2 pos, ComponentGenerator system)
         {
-	        var node = new SystemNodeView(pos, ComponentGenerator);
+	        //create the data.
+	        var systemNode = new SystemNode();
+	        systemNode.System = system;
+	        systemNode.NodeID = Guid.NewGuid().ToString();
+
+	        //for size
+	        systemNode.Position = pos;
+	        systemNode.Size = new Vector2(300, 250);//todo: this conflates with default node size
+	        
+	        var node = new SystemNodeView(systemNode, ComponentGenerator);
+	        ComponentGenerator.InnerSystem.Nodes.Add(systemNode);
 	        return node;
-        }       
+        }
+
+        public SystemNodeView RecreateSystemNodeView(SystemNode node)
+        {
+	        var n = new SystemNodeView(node, ComponentGenerator);
+	        return n;
+        }  
 	}
 }

@@ -7,23 +7,29 @@ namespace Zoompy.Generator.Editor.SystemGraph
 	{
 		private SystemNode _systemNode;
 
-		public SystemNodeView(Vector2 pos, ComponentGenerator parent) : base(parent)
+		public SystemNodeView(SystemNode node, ComponentGenerator parent) : base(parent)
 		{
-			_systemNode = new SystemNode();
-			_systemNode.System = parent;
-			_systemNode.NodeID = guid;
-			SetPosition(new Rect(pos, defaultNodeSize));
+			_systemNode = node;
+			Init();
+		}
+
+		private void Init()
+		{
+			this.title = _systemNode.System.name;
+			this.name = _systemNode.System.name;
+			
+			SetPosition(new Rect(_systemNode.Position, _systemNode.Size));
+
 			CreateInputPorts();
 			CreateOutputPorts();
 			RefreshExpandedState();
 			RefreshPorts();
-
 		}
 		private void CreateInputPorts()
 		{
 			for (int i = 0; i < _systemNode.System.numberInputs; i++)
 			{
-				var input = AddPort("Input  " + i.ToString(), Direction.Output, Port.Capacity.Single);
+				var input = AddPort("Input  " + i.ToString(), Direction.Input, Port.Capacity.Single);
 			}
 		}
 
