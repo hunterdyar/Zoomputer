@@ -11,6 +11,7 @@ namespace Zoompy.Generator
 		public Vector3 ContainerBaseSize = Vector3.one;
 		public float PortSize;
 		public ContainerDisplay ContainerDisplayPrefab;
+		public Wire WirePrefab;
 		public SignalPort PortPrefab;
 		public Material defaultSystemMaterial;
 		public float containerMargin;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -83,8 +84,24 @@ namespace Zoompy.Generator
 			GenerateInnerSystem(containerDisplay, cs);
 			
 			//connect inner systems with wires.
-
+			//do this after nodes so we have all the port worldPositions.
+			//GenerateWires(cs);
 			return g;
+		}
+
+		private void GenerateWires(ComponentSystem cs, Dictionary<string,SignalPort> ports)
+		{
+			foreach (var edge in InnerSystem.Edges)
+			{
+				var from = ports[PortLookupKey(edge.FromNode, edge.FromIndex)];
+				var to = ports[PortLookupKey(edge.ToNode, edge.ToIndex)];
+
+			}
+		}
+
+		string PortLookupKey(string nodeID, int index)
+		{
+			return nodeID + "_" + index.ToString();
 		}
 
 		void GenerateInnerSystem(ContainerDisplay outerContainer, ComponentSystem cs)

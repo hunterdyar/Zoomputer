@@ -34,6 +34,17 @@ public class WireView : MonoBehaviour
 
     void RebuildSpline()
     {
+        //lazy init because lots of non-play mode testing 
+        if (_spline == null)
+        {
+            _spline = GetComponent<SplineContainer>();
+        }
+
+        if (_splineExtrude == null)
+        {
+            _splineExtrude = GetComponent<SplineExtrude>();
+        }
+        
         while (_spline.Splines.Count > 0)
         {
             _spline.RemoveSplineAt(0);
