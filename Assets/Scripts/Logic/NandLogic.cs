@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Zoompy;
-using Zoompy.LogicImplementations;
 
 [Logic]
 public class NandLogic : MonoBehaviour, ISignalHook

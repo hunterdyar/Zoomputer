@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zoompy.LogicImplementations;
 
 namespace Zoompy
 {
@@ -150,6 +149,11 @@ namespace Zoompy
             {
                  _baseLogic.OnInputChange(index, data);
             }
+        }
+
+        public void SetIsLeaf(bool isLeaf)
+        {
+            IsLeaf = isLeaf;
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using Zoompy;
 using Zoompy.SystemVisuals;
 
-namespace ComponentGenerator
+namespace Zoompy.Generator
 {
 	[CreateAssetMenu(fileName = "GenSettings", menuName = "MENUNAME", order = 0)]
 	public class GenerationSettings : ScriptableObject

@@ -8,8 +8,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Zoompy;
 using Zoompy.Extensions;
-
-[CustomEditor(typeof(Zoompy.ComponentGenerator.ComponentGenerator))]
+[CustomEditor(typeof(Zoompy.Generator.ComponentGenerator))]
 public class ComponentGeneratorEditor : Editor
 {
 	public override VisualElement CreateInspectorGUI()
@@ -42,23 +41,32 @@ public class ComponentGeneratorEditor : Editor
 			index = 0;
 		}
 		
-		
 		var logicNameDropdown = new DropdownField(props,index,
-			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix,
-			Zoompy.ComponentGenerator.ComponentGenerator.StripLogicSuffix);
+			Zoompy.Generator.ComponentGenerator.StripLogicSuffix,
+			Zoompy.Generator.ComponentGenerator.StripLogicSuffix);
 		logicNameDropdown.RegisterValueChangedCallback(e =>
 		{	
-			((Zoompy.ComponentGenerator.ComponentGenerator)target).baseLogicClassName = e.newValue;
+			((Zoompy.Generator.ComponentGenerator)target).baseLogicClassName = e.newValue;
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);
 
+		//
+		var isLeafProp = serializedObject.FindProperty("IsLeaf");
+		var isLeafElement = new PropertyField(isLeafProp);
+		container.Add(isLeafElement);
 		
 		//material
 		container.Add(new Label("Visuals"));
 		var overrideMatProperty = serializedObject.FindProperty("_overrideContainerMaterial");
 		var overrideMatElements = new PropertyField(overrideMatProperty);
 		container.Add(overrideMatElements);
+
+		container.Add(new Label("Debug"));
+		var innerSystemProp = serializedObject.FindProperty("InnerSystem");
+		var innserSystemElement = new PropertyField(innerSystemProp);
+		innserSystemElement.SetEnabled(false);
+		container.Add(innserSystemElement);
 		
 		return container;
 	}
