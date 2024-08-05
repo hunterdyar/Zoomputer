@@ -14,27 +14,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberInputs: 2
   numberOutputs: 1
-  baseLogicClassName: NotLogic
+  baseLogicClassName: AndLogic
   _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
   _overrideContainerMaterial: {fileID: 0}
   InnerSystem:
-    Input: 
+    Input: 1acf9faa-454f-4f7c-bd13-4c6ba03f64ce
     InputPos:
       serializedVersion: 2
-      x: 0
-      y: 0
+      x: -9
+      y: 13
       width: 82
       height: 101
-    Output: 
+    Output: 5ba00fd5-9ce1-402b-92c1-bde8c47135bf
     OutputPos:
       serializedVersion: 2
-      x: 463
-      y: 78
+      x: 479
+      y: 13
       width: 92
       height: 77
     Nodes:
-    - NodeID: 8b6bc915-438b-4157-a038-1f9a3b54b72f
-      System: {fileID: 11400000, guid: 405e77e3e69e67f4a9e21aa14d0113b5, type: 2}
-      Position: {x: 216, y: 97}
-      Size: {x: 300, y: 250}
-    Edges: []
+    - NodeID: c82d6780-d707-4707-bf0d-f5b019034ca1
+      System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
+      Position: {x: 95, y: 13}
+      Size: {x: 162, y: 101}
+    - NodeID: a708c09a-5c72-48fe-a222-bbc759456317
+      System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
+      Position: {x: 291, y: 13}
+      Size: {x: 162, y: 101}
+    Edges:
+    - FromNode: a708c09a-5c72-48fe-a222-bbc759456317
+      FromIndex: 0
+      ToNode: 5ba00fd5-9ce1-402b-92c1-bde8c47135bf
+      ToIndex: 0
+    - FromNode: c82d6780-d707-4707-bf0d-f5b019034ca1
+      FromIndex: 0
+      ToNode: a708c09a-5c72-48fe-a222-bbc759456317
+      ToIndex: 0
+    - FromNode: c82d6780-d707-4707-bf0d-f5b019034ca1
+      FromIndex: 0
+      ToNode: a708c09a-5c72-48fe-a222-bbc759456317
+      ToIndex: 1
+    - FromNode: 1acf9faa-454f-4f7c-bd13-4c6ba03f64ce
+      FromIndex: 0
+      ToNode: c82d6780-d707-4707-bf0d-f5b019034ca1
+      ToIndex: 0
+    - FromNode: 1acf9faa-454f-4f7c-bd13-4c6ba03f64ce
+      FromIndex: 1
+      ToNode: c82d6780-d707-4707-bf0d-f5b019034ca1
+      ToIndex: 1
+  IsLeaf: 0

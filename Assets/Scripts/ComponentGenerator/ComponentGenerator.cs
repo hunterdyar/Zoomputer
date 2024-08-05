@@ -27,6 +27,8 @@ namespace Zoompy.Generator
 		private float Height() => _genSettings.containerMargin* 2 + MaxPorts* _genSettings.PortSize + (MaxPorts* _genSettings.portgap);
 
 		public SystemDescription InnerSystem;
+
+		[SerializeField] public bool IsLeaf;
 		
 		[ContextMenu("Generate")]
 		private void Gen()

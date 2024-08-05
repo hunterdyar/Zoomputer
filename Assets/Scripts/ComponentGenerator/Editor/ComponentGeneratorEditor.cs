@@ -50,6 +50,11 @@ public class ComponentGeneratorEditor : Editor
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);
+
+		//
+		var isLeafProp = serializedObject.FindProperty("IsLeaf");
+		var isLeafElement = new PropertyField(isLeafProp);
+		container.Add(isLeafElement);
 		
 		//material
 		container.Add(new Label("Visuals"));
@@ -57,10 +62,11 @@ public class ComponentGeneratorEditor : Editor
 		var overrideMatElements = new PropertyField(overrideMatProperty);
 		container.Add(overrideMatElements);
 
-		// container.Add(new Label("Debug"));
-		 var innerSystemProp = serializedObject.FindProperty("InnerSystem");
-		// var innserSystemElement = new PropertyField(innerSystemProp);
-		// container.Add(innserSystemElement);
+		container.Add(new Label("Debug"));
+		var innerSystemProp = serializedObject.FindProperty("InnerSystem");
+		var innserSystemElement = new PropertyField(innerSystemProp);
+		innserSystemElement.SetEnabled(false);
+		container.Add(innserSystemElement);
 		
 		return container;
 	}

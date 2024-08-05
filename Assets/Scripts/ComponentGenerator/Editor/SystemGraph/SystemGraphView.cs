@@ -51,6 +51,16 @@ namespace Zoompy.Generator.Editor.SystemGraph
 
 			AddSearchWindow();
 			
+			//safety checks before loading
+			if (string.IsNullOrEmpty(_systemParent.InnerSystem.Input))
+			{
+				_systemParent.InnerSystem.Input = Guid.NewGuid().ToString();
+			}
+
+			if (string.IsNullOrEmpty(_systemParent.InnerSystem.Output))
+			{
+				_systemParent.InnerSystem.Output = Guid.NewGuid().ToString();
+			}
 			LoadNodeViewsFromData();
         }
 
@@ -72,6 +82,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 	        }
 
 	        _inputsNodeView = new SystemInputNodeView(ComponentGenerator);
+	        
 	        _inputsNodeView.SetID(_systemParent.InnerSystem.Input);
 	        _inputsNodeView.SetPosition(_systemParent.InnerSystem.InputPos);
 	        AddElement(_inputsNodeView);
@@ -138,6 +149,22 @@ namespace Zoompy.Generator.Editor.SystemGraph
 	        }
 
 	        return compatiblePorts;
+        }
+
+        public Rect GetAllNodesBounds()
+        {
+	        Rect r = new Rect();
+	        //grow the rext to encompas all nodes
+	        foreach (var node in nodes)
+	        {
+		        var p = node.GetPosition();
+		        r.xMax = Mathf.Max(r.xMax, p.xMax);
+		        r.xMin = Mathf.Max(r.xMin, p.xMin);
+		        r.yMax = Mathf.Max(r.yMax, p.yMax);
+		        r.yMin = Mathf.Max(r.yMin, p.yMin);
+	        }
+
+	        return r;
         }
 
         public SystemNodeView CreateNewSystemNodeView(Vector2 pos, ComponentGenerator system)

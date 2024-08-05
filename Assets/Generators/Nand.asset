@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
-  m_Name: And 1
+  m_Name: Nand
   m_EditorClassIdentifier: 
   numberInputs: 2
   numberOutputs: 1
-  baseLogicClassName: NotLogic
+  baseLogicClassName: NandLogic
   _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
   _overrideContainerMaterial: {fileID: 0}
   InnerSystem:
@@ -36,5 +36,6 @@ MonoBehaviour:
     - NodeID: 8b6bc915-438b-4157-a038-1f9a3b54b72f
       System: {fileID: 11400000, guid: 405e77e3e69e67f4a9e21aa14d0113b5, type: 2}
       Position: {x: 216, y: 97}
-      Size: {x: 300, y: 250}
+      Size: {x: 162, y: 77}
     Edges: []
+  IsLeaf: 1

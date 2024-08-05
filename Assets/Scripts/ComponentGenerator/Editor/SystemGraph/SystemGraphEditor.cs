@@ -21,7 +21,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 		public static bool ShowWindow(int instanceID, int line)
 		{
 			UnityEngine.Object item = EditorUtility.InstanceIDToObject(instanceID);
-			if (item is ComponentGenerator)
+			if (item is ComponentGenerator cg)
 			{
 				SystemGraphEditor window = (SystemGraphEditor)GetWindow(typeof(SystemGraphEditor));
 				window.titleContent = new GUIContent("Component System Editor");
@@ -96,6 +96,7 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			_graphView.style.width = new StyleLength(Length.Percent(100));
 			_graphView.style.height = new StyleLength(Length.Percent(100));
 			_graphView.style.top = new StyleLength(new Length(16));
+			_graphView.SetEnabled(!_currentComponentContainer.IsLeaf);
 		}
 		
 	}

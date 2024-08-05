@@ -14,5 +14,7 @@ namespace Zoompy.Generator
 		
 		public SystemNode[] Nodes;
 		public SystemEdge[] Edges;
+
+		public Rect Bounds;
 	}
 }

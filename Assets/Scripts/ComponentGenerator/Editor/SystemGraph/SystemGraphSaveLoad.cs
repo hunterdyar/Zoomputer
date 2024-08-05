@@ -32,6 +32,9 @@ namespace Zoompy.Generator.Editor.SystemGraph
 			SaveInputOutput(gen);
 			SaveNodes(gen);
 			SaveEdges(gen);
+
+			//save bounds
+			gen.InnerSystem.Bounds = _graphView.GetAllNodesBounds();
 			
 			EditorUtility.SetDirty(gen);
 			AssetDatabase.SaveAssetIfDirty(gen);
