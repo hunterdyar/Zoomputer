@@ -28,8 +28,8 @@ namespace Zoompy.Generator
 		private int MaxPorts => numberInputs > numberOutputs ? numberInputs : numberOutputs;
 		private float Height() => _genSettings.containerMargin* 2 + MaxPorts* _genSettings.PortSize + (MaxPorts* _genSettings.portgap);
 
+		
 		public SystemDescription InnerSystem;
-
 		[SerializeField] public bool IsLeaf;
 		
 		[ContextMenu("Generate")]
@@ -37,7 +37,7 @@ namespace Zoompy.Generator
 		{
 			Generate(null);
 		}
-		public GameObject Generate(Transform parent = null)
+		public ComponentSystem Generate(Transform parent = null)
 		{
 			var g = new GameObject();
 			var cs = g.AddComponent<ComponentSystem>();
@@ -66,16 +66,19 @@ namespace Zoompy.Generator
 			ig.name = "Input Ports";
 			ig.transform.SetParent(cs.transform);
 			cs.SetPorts(new SignalPort[numberInputs], PortType.Input);
+			cs.inputNodeID = InnerSystem.Input;//reference for node lookup
 			for (int i = 0; i < numberInputs; i++)
 			{
 				var p = CreatePort(cs, i, PortType.Input, ig.transform);
 			}
+
 			
 			//spawn and position outputs
 			ig = new GameObject();
 			ig.name = "Output Ports";
 			ig.transform.SetParent(cs.transform);
 			cs.SetPorts(new SignalPort[numberOutputs], PortType.Output);
+			cs.outputNodeID = InnerSystem.Output;//reference for node lookup
 			for (int i = 0; i < numberOutputs; i++)
 			{
 				var p = CreatePort(cs,i,PortType.Output, ig.transform);
@@ -85,17 +88,28 @@ namespace Zoompy.Generator
 			
 			//connect inner systems with wires.
 			//do this after nodes so we have all the port worldPositions.
-			//GenerateWires(cs);
-			return g;
+			GenerateWires(cs);
+			return cs;
 		}
 
-		private void GenerateWires(ComponentSystem cs, Dictionary<string,SignalPort> ports)
+		private void GenerateWires(ComponentSystem cs)
 		{
+			var wireParent = new GameObject();
+			wireParent.name = "Connections";
+			wireParent.transform.SetParent(cs.transform);
 			foreach (var edge in InnerSystem.Edges)
 			{
-				var from = ports[PortLookupKey(edge.FromNode, edge.FromIndex)];
-				var to = ports[PortLookupKey(edge.ToNode, edge.ToIndex)];
-
+				var fb = cs.TryGetInnerPort(edge.FromNode,PortType.Output, edge.FromIndex, out SignalPort fromPort);
+				var ft = cs.TryGetInnerPort(edge.ToNode, PortType.Input, edge.ToIndex, out SignalPort toPort);
+				if (fb && ft)
+				{
+					Wire w = Instantiate(_genSettings.WirePrefab, wireParent.transform);
+					w.Configure(fromPort, toPort);
+				}
+				else
+				{
+					Debug.LogWarning("uh oh");
+				}
 			}
 		}
 
@@ -113,6 +127,8 @@ namespace Zoompy.Generator
 			}
 		
 			GameObject innerSystem = new GameObject();
+			cs.insideView = innerSystem.AddComponent<LayerView>();
+			
 			innerSystem.name = "Inner System View";
 			innerSystem.transform.SetParent(cs.transform);
 			//set ... scale?
@@ -124,34 +140,36 @@ namespace Zoompy.Generator
 			var zscale = innerBounds.size.z / outerBounds.size.z;
 			//map normalized scale to outer bounds scale
 			var scale = 1 / outerBounds.size.x;
-			
-			
+
+			cs.insideView.Nodes = new ComponentSystem[InnerSystem.Nodes.Length];
 			innerSystem.transform.localScale = Vector3.one * scale;
-			foreach (var systemNode in InnerSystem.Nodes)
+			for (var i = 0; i < InnerSystem.Nodes.Length; i++)
 			{
-				var relX = Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax, systemNode.Position.x + systemNode.Size.x / 2);//+systemNode.Size.x/2
+				var systemNode = InnerSystem.Nodes[i];
+				var relX = Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax,
+					systemNode.Position.x + systemNode.Size.x / 2); //+systemNode.Size.x/2
 				//1- to flip from top-left origin of graph to bottom-left origin of world.
-				var relZ = 1-Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax, systemNode.Position.y + systemNode.Size.y / 2);//
-				
+				var relZ = 1 - Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax,
+					systemNode.Position.y + systemNode.Size.y / 2); //
+
 				//percentage of entire bounds. 
 				var widthScale = InnerSystem.Bounds.width / systemNode.Size.x;
 				var heightScale = InnerSystem.Bounds.height / systemNode.Size.y;
-				
+
 				var gameNode = systemNode.System.Generate();
+				cs.insideView.Nodes[i] = gameNode;//parent reference of inner node
+				gameNode.SetGuid(systemNode.NodeID);//inner node keeps id for lookups, for wires.
+				
 				gameNode.transform.SetParent(innerSystem.transform);
 				//set position. 
 				gameNode.transform.position = new Vector3(
-					Mathf.Lerp(outerBounds.min.x, outerBounds.max.x,relX),
-					outerBounds.center.y, 
+					Mathf.Lerp(outerBounds.min.x, outerBounds.max.x, relX),
+					outerBounds.center.y,
 					Mathf.Lerp(outerBounds.min.y, outerBounds.max.y, relZ));
 				//scale is size over area on each axis
-				gameNode.transform.localScale = Vector3.one/Mathf.Lerp(1,outerBounds.size.x,widthScale)*scale;
+				gameNode.transform.localScale = Vector3.one / Mathf.Lerp(1, outerBounds.size.x, widthScale) * scale;
 			}
-
-			foreach (var edge in InnerSystem.Edges)
-			{
-				//todo: Instantiate a wire
-			}
+			
 		}
 		
 

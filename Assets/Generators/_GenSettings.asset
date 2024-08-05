@@ -16,6 +16,8 @@ MonoBehaviour:
   PortSize: 0.5
   ContainerDisplayPrefab: {fileID: 3716005978962784141, guid: 63ff1751be2365d49857a1a94076b93b,
     type: 3}
+  WirePrefab: {fileID: 699857840905752884, guid: 78793e628e0eda64795c3a4bb216ad4c,
+    type: 3}
   PortPrefab: {fileID: 4641742197402074351, guid: 1792b7e17ca68964ea8ec951aaec642f,
     type: 3}
   defaultSystemMaterial: {fileID: 2100000, guid: 18e45a5eb5ea0384480951303585ce16,

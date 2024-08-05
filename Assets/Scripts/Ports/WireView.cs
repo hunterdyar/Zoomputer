@@ -14,17 +14,24 @@ public class WireView : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        _wire = GetComponentInParent<Wire>();
         _spline = GetComponent<SplineContainer>();
         _splineExtrude = GetComponent<SplineExtrude>();
             
         var se = GetComponent<SplineExtrude>();
-        se.RebuildOnSplineChange = true;
+        se.RebuildOnSplineChange = false;
+    }
+
+    public void SetWire(Wire wire)
+    {
+        _wire = wire;
     }
 
     private void Start()
     {
-        RebuildSpline();
+        if (_wire != null)
+        {
+            RebuildSpline();
+        }
     }
 
     private void OnEnable()
@@ -32,7 +39,7 @@ public class WireView : MonoBehaviour
         // RebuildSpline();
     }
 
-    void RebuildSpline()
+    public void RebuildSpline()
     {
         //lazy init because lots of non-play mode testing 
         if (_spline == null)
@@ -45,6 +52,7 @@ public class WireView : MonoBehaviour
             _splineExtrude = GetComponent<SplineExtrude>();
         }
         
+        //reset splines.
         while (_spline.Splines.Count > 0)
         {
             _spline.RemoveSplineAt(0);

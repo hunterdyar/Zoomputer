@@ -52,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   From: {fileID: 0}
   To: {fileID: 0}
+  wireView: {fileID: 6046279213708653109}
 --- !u!114 &6046279213708653109
 MonoBehaviour:
   m_ObjectHideFlags: 0

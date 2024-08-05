@@ -13,6 +13,7 @@ public class LayerView : MonoBehaviour
     public Bounds Bounds => _bounds; 
     private Bounds _bounds;
 
+    public ComponentSystem[] Nodes;
     //Setup gets called by the ComponentSystem once on all layers during init.
     public void Setup(ComponentSystem componentSystem)
     {
