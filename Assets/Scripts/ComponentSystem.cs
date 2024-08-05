@@ -151,5 +151,10 @@ namespace Zoompy
                  _baseLogic.OnInputChange(index, data);
             }
         }
+
+        public void SetIsLeaf(bool isLeaf)
+        {
+            IsLeaf = isLeaf;
+        }
     }
 }

@@ -70,14 +70,52 @@ namespace Zoompy.Generator
 			{
 				var p = CreatePort(cs,i,PortType.Output, ig.transform);
 			}
-			
-			//spawn and position inner systems
+
+			GenerateInnerSystem(cs);
 			
 			//connect inner systems with wires.
 
 			return g;
 		}
 
+		void GenerateInnerSystem(ComponentSystem cs)
+		{
+			cs.SetIsLeaf(IsLeaf);
+			if (IsLeaf)
+			{
+				return;
+			}
+		
+			GameObject innerSystem = new GameObject();
+			innerSystem.name = "Inner System View";
+			innerSystem.transform.SetParent(cs.transform);
+			//set ... scale?
+			//we can get bounds from the container.
+			var bounds = cs.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().bounds;
+			
+			//the .2 and the 5 come from an arbitraryscaleodwn
+			var scale = 5;
+			innerSystem.transform.localScale = Vector3.one * (1f /scale);
+			
+			foreach (var systemNode in InnerSystem.Nodes)
+			{
+				var relX = Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax, systemNode.Position.x+systemNode.Size.x/2);
+				var relY = Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax, systemNode.Position.y+systemNode.Size.y/2);
+				
+				var gameNode = systemNode.System.Generate();
+				gameNode.transform.SetParent(innerSystem.transform);
+				//set position. 
+				//todo: how do we transform these positions to the world space?
+				gameNode.transform.localPosition = new Vector3(Mathf.Lerp(bounds.min.x, bounds.max.x,relX)*scale, 0, Mathf.Lerp(bounds.min.y, bounds.max.y, relY)*scale);
+				//scale is size over area on each axis
+				gameNode.transform.localScale = Vector3.one;
+			}
+
+			foreach (var edge in InnerSystem.Edges)
+			{
+				//todo: Instantiate a wire
+			}
+		}
 		
 
 		private GameObject GenerateContainer(ComponentSystem system)

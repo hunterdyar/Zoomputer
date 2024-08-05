@@ -62,4 +62,10 @@ MonoBehaviour:
       FromIndex: 1
       ToNode: c82d6780-d707-4707-bf0d-f5b019034ca1
       ToIndex: 1
+    Bounds:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
   IsLeaf: 0
