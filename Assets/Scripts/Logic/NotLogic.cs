@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zoompy;
-using Zoompy.LogicImplementations;
 
 [Logic]
 public class NotLogic : MonoBehaviour, ISignalHook

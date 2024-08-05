@@ -159,9 +159,9 @@ namespace Zoompy.Generator.Editor.SystemGraph
 	        {
 		        var p = node.GetPosition();
 		        r.xMax = Mathf.Max(r.xMax, p.xMax);
-		        r.xMin = Mathf.Max(r.xMin, p.xMin);
+		        r.xMin = Mathf.Min(r.xMin, p.xMin);
 		        r.yMax = Mathf.Max(r.yMax, p.yMax);
-		        r.yMin = Mathf.Max(r.yMin, p.yMin);
+		        r.yMin = Mathf.Min(r.yMin, p.yMin);
 	        }
 
 	        return r;

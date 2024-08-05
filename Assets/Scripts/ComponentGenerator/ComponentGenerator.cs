@@ -2,6 +2,7 @@
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using Zoompy.SystemVisuals;
 
 namespace Zoompy.Generator
 {
@@ -45,12 +46,20 @@ namespace Zoompy.Generator
 			g.name = rootName;//may get renamed later.
 			
 			//spawn and position outer container
-			var container = GenerateContainer(cs);//sets itself as child of sysetm
+			var containerDisplay = GenerateContainer(cs);//sets itself as child of sysetm
 			
 			//add logic
+			//todo: check for validity
 			var logicType = Type.GetType(baseLogicClassName);
-			g.AddComponent(logicType);
-			
+			if (logicType != null)
+			{
+				g.AddComponent(logicType);
+			}
+			else
+			{
+				Debug.LogWarning($"Could not GetType: {baseLogicClassName}");
+			}
+
 			//spawn and position inputs
 			var ig = new GameObject();
 			ig.name = "Input Ports";
@@ -71,14 +80,14 @@ namespace Zoompy.Generator
 				var p = CreatePort(cs,i,PortType.Output, ig.transform);
 			}
 
-			GenerateInnerSystem(cs);
+			GenerateInnerSystem(containerDisplay, cs);
 			
 			//connect inner systems with wires.
 
 			return g;
 		}
 
-		void GenerateInnerSystem(ComponentSystem cs)
+		void GenerateInnerSystem(ContainerDisplay outerContainer, ComponentSystem cs)
 		{
 			cs.SetIsLeaf(IsLeaf);
 			if (IsLeaf)
@@ -90,25 +99,36 @@ namespace Zoompy.Generator
 			innerSystem.name = "Inner System View";
 			innerSystem.transform.SetParent(cs.transform);
 			//set ... scale?
-			//we can get bounds from the container.
-			var bounds = cs.transform.GetChild(0).GetComponentInChildren<MeshRenderer>().bounds;
+			var outerBounds = outerContainer.GetBounds();
+			//inner is a rect in 2D space. Here we make a 3D bounds for it on xz plane, using the outer settings for the y.
+			var innerBounds = new Bounds(new Vector3(InnerSystem.Bounds.center.x,outerBounds.center.y,InnerSystem.Bounds.y),
+				new Vector3(InnerSystem.Bounds.size.x, outerBounds.size.y, InnerSystem.Bounds.y));
+			var xscale = innerBounds.size.x / outerBounds.size.x;
+			var zscale = innerBounds.size.z / outerBounds.size.z;
+			//map normalized scale to outer bounds scale
+			var scale = 1 / outerBounds.size.x;
 			
-			//the .2 and the 5 come from an arbitraryscaleodwn
-			var scale = 5;
-			innerSystem.transform.localScale = Vector3.one * (1f /scale);
 			
+			innerSystem.transform.localScale = Vector3.one * scale;
 			foreach (var systemNode in InnerSystem.Nodes)
 			{
-				var relX = Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax, systemNode.Position.x+systemNode.Size.x/2);
-				var relY = Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax, systemNode.Position.y+systemNode.Size.y/2);
+				var relX = Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax, systemNode.Position.x + systemNode.Size.x / 2);//+systemNode.Size.x/2
+				//1- to flip from top-left origin of graph to bottom-left origin of world.
+				var relZ = 1-Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax, systemNode.Position.y + systemNode.Size.y / 2);//
+				
+				//percentage of entire bounds. 
+				var widthScale = InnerSystem.Bounds.width / systemNode.Size.x;
+				var heightScale = InnerSystem.Bounds.height / systemNode.Size.y;
 				
 				var gameNode = systemNode.System.Generate();
 				gameNode.transform.SetParent(innerSystem.transform);
 				//set position. 
-				//todo: how do we transform these positions to the world space?
-				gameNode.transform.localPosition = new Vector3(Mathf.Lerp(bounds.min.x, bounds.max.x,relX)*scale, 0, Mathf.Lerp(bounds.min.y, bounds.max.y, relY)*scale);
+				gameNode.transform.position = new Vector3(
+					Mathf.Lerp(outerBounds.min.x, outerBounds.max.x,relX),
+					outerBounds.center.y, 
+					Mathf.Lerp(outerBounds.min.y, outerBounds.max.y, relZ));
 				//scale is size over area on each axis
-				gameNode.transform.localScale = Vector3.one;
+				gameNode.transform.localScale = Vector3.one/Mathf.Lerp(1,outerBounds.size.x,widthScale)*scale;
 			}
 
 			foreach (var edge in InnerSystem.Edges)
@@ -118,7 +138,7 @@ namespace Zoompy.Generator
 		}
 		
 
-		private GameObject GenerateContainer(ComponentSystem system)
+		private ContainerDisplay GenerateContainer(ComponentSystem system)
 		{
 			//get max number of ports.
 			int ports = MaxPorts;
@@ -137,7 +157,7 @@ namespace Zoompy.Generator
 			//apply material
 			display.SetMaterial(ContainerMaterial());
 			display.SetName(system.DisplayName.ToUpper());
-			return layerg;
+			return display;
 		}
 
 		private SignalPort CreatePort(ComponentSystem cs, int index, PortType portType, Transform parent = null)

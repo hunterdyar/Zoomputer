@@ -28,18 +28,18 @@ MonoBehaviour:
     Output: 5ba00fd5-9ce1-402b-92c1-bde8c47135bf
     OutputPos:
       serializedVersion: 2
-      x: 479
+      x: 885
       y: 13
       width: 92
       height: 77
     Nodes:
     - NodeID: c82d6780-d707-4707-bf0d-f5b019034ca1
       System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
-      Position: {x: 95, y: 13}
+      Position: {x: 303, y: 13}
       Size: {x: 162, y: 101}
     - NodeID: a708c09a-5c72-48fe-a222-bbc759456317
       System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
-      Position: {x: 291, y: 13}
+      Position: {x: 511, y: 13}
       Size: {x: 162, y: 101}
     Edges:
     - FromNode: a708c09a-5c72-48fe-a222-bbc759456317
@@ -64,8 +64,8 @@ MonoBehaviour:
       ToIndex: 1
     Bounds:
       serializedVersion: 2
-      x: 0
+      x: -9
       y: 0
-      width: 0
-      height: 0
+      width: 986
+      height: 114
   IsLeaf: 0
