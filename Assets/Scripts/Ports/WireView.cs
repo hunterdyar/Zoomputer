@@ -41,6 +41,9 @@ public class WireView : MonoBehaviour
 
     public void RebuildSpline()
     {
+        var mf = GetComponent<MeshFilter>();
+        //clone the mesh so we aren't using the same asset (from the prefab). yes, this bug was a pain, thanks for asking.
+        mf.mesh = Instantiate(mf.sharedMesh);
         //lazy init because lots of non-play mode testing 
         if (_spline == null)
         {
