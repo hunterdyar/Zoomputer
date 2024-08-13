@@ -10,33 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
-  m_Name: Nand
+  m_Name: LED
   m_EditorClassIdentifier: 
-  numberInputs: 2
+  numberInputs: 1
   numberOutputs: 1
-  baseLogicClassName: NandLogic
+  baseLogicClassName: LEDLogic
   _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
   _overrideContainerMaterial: {fileID: 0}
   InnerSystem:
-    Input: 0c4425f9-12ff-4587-8c1f-483e62d0da10
+    Input: 
     InputPos:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 82
-      height: 101
-    Output: 1e5b3b92-1bce-4105-b789-6045faf8d2db
+      width: 0
+      height: 0
+    Output: 
     OutputPos:
       serializedVersion: 2
-      x: 463
-      y: 78
-      width: 92
-      height: 77
-    Nodes:
-    - NodeID: 8b6bc915-438b-4157-a038-1f9a3b54b72f
-      System: {fileID: 11400000, guid: 405e77e3e69e67f4a9e21aa14d0113b5, type: 2}
-      Position: {x: 216, y: 97}
-      Size: {x: 162, y: 77}
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    Nodes: []
     Edges: []
     Bounds:
       serializedVersion: 2

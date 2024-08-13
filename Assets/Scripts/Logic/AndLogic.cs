@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using Zoompy;
 
-[Logic]
+[Logic(Path="Gate/And")]
 public class AndLogic : MonoBehaviour, ISignalHook
 {
 	private ComponentSystem _parent;

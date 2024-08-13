@@ -6,6 +6,6 @@ namespace Zoompy
 	[AttributeUsage(AttributeTargets.Class)]
 	public class LogicAttribute : Attribute
 	{
-		
+		public string Path;
 	}
 }

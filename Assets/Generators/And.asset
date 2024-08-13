@@ -35,11 +35,11 @@ MonoBehaviour:
     Nodes:
     - NodeID: c82d6780-d707-4707-bf0d-f5b019034ca1
       System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
-      Position: {x: 303, y: 13}
+      Position: {x: 281, y: -22}
       Size: {x: 162, y: 101}
     - NodeID: a708c09a-5c72-48fe-a222-bbc759456317
       System: {fileID: 11400000, guid: 563999a47af83234d99c60a96a69e0c9, type: 2}
-      Position: {x: 511, y: 13}
+      Position: {x: 523, y: -72}
       Size: {x: 162, y: 101}
     Edges:
     - FromNode: a708c09a-5c72-48fe-a222-bbc759456317
@@ -65,7 +65,7 @@ MonoBehaviour:
     Bounds:
       serializedVersion: 2
       x: -9
-      y: 0
+      y: -72
       width: 986
-      height: 114
+      height: 186
   IsLeaf: 0

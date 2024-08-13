@@ -6,7 +6,6 @@ namespace Zoompy.Generator.Editor.SystemGraph
 {
 	public class SystemNodeView : BaseNodeView
 	{
-
 		public SystemNode SystemNode => _systemNode;
 		private SystemNode _systemNode;
 
@@ -19,6 +18,10 @@ namespace Zoompy.Generator.Editor.SystemGraph
 		private void Init()
 		{
 			this.capabilities = this.capabilities & ~Capabilities.Collapsible;
+			if (_systemNode.System == null)
+			{
+				Debug.LogError("Error, System Node is null! Something is out of sync with serialization, or a leaf node has not been set as 'IsLeaf'");
+			}
 			this.title = _systemNode.System.name;
 			this.name = _systemNode.System.name;
 			this.SetID(_systemNode.NodeID);

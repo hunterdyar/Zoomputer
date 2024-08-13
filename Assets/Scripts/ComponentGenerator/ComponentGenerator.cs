@@ -7,7 +7,7 @@ using Zoompy.SystemVisuals;
 
 namespace Zoompy.Generator
 {
-	[CreateAssetMenu(fileName = "Gneratore", menuName = "Component/Generator", order = 0)]
+	[CreateAssetMenu(fileName = "Generator", menuName = "Component/Component Generator", order = 0)]
 	public class ComponentGenerator : ScriptableObject
 	{
 		[Min(0)]
@@ -24,7 +24,7 @@ namespace Zoompy.Generator
 		private Material ContainerMaterial() => _overrideContainerMaterial == null ? _genSettings.defaultSystemMaterial : _overrideContainerMaterial;
 		[Tooltip("Optional material for container object.")]
 		[SerializeField] private Material _overrideContainerMaterial;
-
+		//todo: override generated object (buttons, LED's, etc)
 		private int MaxPorts => numberInputs > numberOutputs ? numberInputs : numberOutputs;
 		private float Height() => _genSettings.containerMargin* 2 + MaxPorts* _genSettings.PortSize + (MaxPorts* _genSettings.portgap);
 
@@ -39,6 +39,11 @@ namespace Zoompy.Generator
 		}
 		public ComponentSystem Generate(Transform parent = null)
 		{
+			if (_genSettings == null)
+			{
+				Debug.LogError("Can't generate, No Generation Settings!");
+				return null;
+			}
 			var g = new GameObject();
 			var cs = g.AddComponent<ComponentSystem>();
 			//set display name
@@ -61,27 +66,33 @@ namespace Zoompy.Generator
 				Debug.LogWarning($"Could not GetType: {baseLogicClassName}");
 			}
 
-			//spawn and position inputs
-			var ig = new GameObject();
-			ig.name = "Input Ports";
-			ig.transform.SetParent(cs.transform);
-			cs.SetPorts(new SignalPort[numberInputs], PortType.Input);
-			cs.inputNodeID = InnerSystem.Input;//reference for node lookup
-			for (int i = 0; i < numberInputs; i++)
+			if (numberInputs > 0)
 			{
-				var p = CreatePort(cs, i, PortType.Input, ig.transform);
+				//spawn and position inputs
+				var ig = new GameObject();
+				ig.name = "Input Ports";
+				ig.transform.SetParent(cs.transform);
+				cs.SetPorts(new SignalPort[numberInputs], PortType.Input);
+				cs.inputNodeID = InnerSystem.Input; //reference for node lookup
+				for (int i = 0; i < numberInputs; i++)
+				{
+					var p = CreatePort(cs, i, PortType.Input, ig.transform);
+				}
 			}
 
-			
+
 			//spawn and position outputs
-			ig = new GameObject();
-			ig.name = "Output Ports";
-			ig.transform.SetParent(cs.transform);
-			cs.SetPorts(new SignalPort[numberOutputs], PortType.Output);
-			cs.outputNodeID = InnerSystem.Output;//reference for node lookup
-			for (int i = 0; i < numberOutputs; i++)
+			if (numberOutputs > 0)
 			{
-				var p = CreatePort(cs,i,PortType.Output, ig.transform);
+				var ig = new GameObject();
+				ig.name = "Output Ports";
+				ig.transform.SetParent(cs.transform);
+				cs.SetPorts(new SignalPort[numberOutputs], PortType.Output);
+				cs.outputNodeID = InnerSystem.Output; //reference for node lookup
+				for (int i = 0; i < numberOutputs; i++)
+				{
+					var p = CreatePort(cs, i, PortType.Output, ig.transform);
+				}
 			}
 
 			GenerateInnerSystem(containerDisplay, cs);
@@ -94,6 +105,10 @@ namespace Zoompy.Generator
 
 		private void GenerateWires(ComponentSystem cs)
 		{
+			if (InnerSystem.Edges.Length == 0)
+			{
+				return;
+			}
 			var wireParent = new GameObject();
 			wireParent.name = "Connections";
 			wireParent.transform.SetParent(cs.transform);
@@ -243,6 +258,11 @@ namespace Zoompy.Generator
 		
 		public static string StripLogicSuffix(string s)
 		{
+			if(string.IsNullOrEmpty(s))
+			{
+				Debug.LogError("No Logic! This is ... wrong?");
+				return "";
+			}
 			if (s.Length < 6)
 			{
 				return s;

@@ -32,21 +32,25 @@ public class ComponentGeneratorEditor : Editor
 
 		var types = GetSignalHookImplementors();
 		container.Add(new Label("Logic"));
-		var props = types.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>p.Name).ToList();
+		var propNames = types.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>p.Name).ToList();
+		var propPaths = types.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>(Attribute.GetCustomAttribute(p,typeof(LogicAttribute)) as LogicAttribute).Path).ToList();
+		
 		var logicBaseClassNameProperty = serializedObject.FindProperty("baseLogicClassName");
-		int index = props.IndexOf(logicBaseClassNameProperty.stringValue);
+		int index = propNames.IndexOf(logicBaseClassNameProperty.stringValue);
 		if (index < 0)
 		{
 			//no correct name set yet.
 			index = 0;
 		}
 		
-		var logicNameDropdown = new DropdownField(props,index,
+		var logicNameDropdown = new DropdownField(propPaths,index,
 			Zoompy.Generator.ComponentGenerator.StripLogicSuffix,
 			Zoompy.Generator.ComponentGenerator.StripLogicSuffix);
 		logicNameDropdown.RegisterValueChangedCallback(e =>
-		{	
-			((Zoompy.Generator.ComponentGenerator)target).baseLogicClassName = e.newValue;
+		{
+			//display the paths, but we want the names.
+			var name = propNames[propPaths.IndexOf(e.newValue)];
+			((Zoompy.Generator.ComponentGenerator)target).baseLogicClassName = name;
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);

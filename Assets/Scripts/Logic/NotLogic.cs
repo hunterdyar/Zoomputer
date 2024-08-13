@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Zoompy;
 
-[Logic]
+[Logic(Path="Gate/Not")]
 public class NotLogic : MonoBehaviour, ISignalHook
 {
     private ComponentSystem _parent;

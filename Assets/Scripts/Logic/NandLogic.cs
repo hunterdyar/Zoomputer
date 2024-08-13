@@ -1,8 +1,9 @@
 using System;
+using System.IO;
 using UnityEngine;
 using Zoompy;
 
-[Logic]
+[Logic(Path="Gate/Nand")]
 public class NandLogic : MonoBehaviour, ISignalHook
 {
     private ComponentSystem _parent;

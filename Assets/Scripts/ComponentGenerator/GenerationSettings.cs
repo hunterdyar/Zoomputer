@@ -5,7 +5,7 @@ using Zoompy.SystemVisuals;
 
 namespace Zoompy.Generator
 {
-	[CreateAssetMenu(fileName = "GenSettings", menuName = "MENUNAME", order = 0)]
+	[CreateAssetMenu(fileName = "GenSettings", menuName = "Component/Generation Settings", order = 0)]
 	public class GenerationSettings : ScriptableObject
 	{
 		public Vector3 ContainerBaseSize = Vector3.one;
