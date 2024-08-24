@@ -114,7 +114,7 @@ namespace Zoompy.Generator
 			}
 
 			IComponentInteractor interactor = null;
-			if (baseInteractorClassName != "None" && baseInteractorClassName != "")
+			if (baseInteractorClassName != "None" && !string.IsNullOrEmpty(baseInteractorClassName))
 			{
 				var interactorType = Type.GetType(baseInteractorClassName);
 				if (interactorType != null)

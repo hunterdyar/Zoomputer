@@ -46,7 +46,6 @@ public class ClickZoomNav : MonoBehaviour
                 ZoomOut();
             }
         }
-        
     }
 
     private void ZoomInto(ComponentSystem system)
@@ -104,7 +103,7 @@ public class ClickZoomNav : MonoBehaviour
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray,out _hitInfo, Mathf.Infinity, _layerViewLayer))
         {
-            view = _hitInfo.collider.GetComponent<LayerView>();
+            view = _hitInfo.collider.GetComponentInParent<LayerView>();
             return view != null;
         }
 

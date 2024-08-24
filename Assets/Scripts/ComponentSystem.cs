@@ -45,7 +45,7 @@ namespace Zoompy
         private void Awake()
         {
             _baseLogic = GetComponent<ISignalHook>();
-            _interactors = GetComponentsInChildren<IComponentInteractor>();
+            _interactors = GetComponents<IComponentInteractor>();
             _baseLogic?.SetComponenSystem(this);
             
             outsideView.Setup(this);

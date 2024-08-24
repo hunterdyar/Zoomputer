@@ -10,9 +10,9 @@ public class LEDLogic : MonoBehaviour, ISignalHook
 	[SerializeField, HideInInspector]
 	private bool SwitchMaterial;
 	[SerializeField, HideInInspector]
-	private Material OnMaterial;
+	public Material OnMaterial;
 	[SerializeField, HideInInspector]
-	private Material OffMaterial;
+	public Material OffMaterial;
 	public GameObject OnChild;
 	public GameObject OffChild;
 	private ComponentSystem _parent;

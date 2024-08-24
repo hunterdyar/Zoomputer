@@ -1,7 +1,10 @@
-﻿namespace Zoompy.Interactors
-{
+﻿
+	using UnityEngine;
+	using Zoompy;
+	using Zoompy.Interactors;
+
 	[Interactor(Path = "Toggle Outputs")]
-	public class ToggleOutputsInteractor : IComponentInteractor
+	public class ToggleOutputsInteractor : MonoBehaviour, IComponentInteractor
 	{
 		private ComponentSystem _cs;
 		public void Configure(ComponentSystem cs)
@@ -17,4 +20,3 @@
 			}
 		}
 	}
-}

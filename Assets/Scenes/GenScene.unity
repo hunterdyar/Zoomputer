@@ -567,7 +567,7 @@ GameObject:
   - component: {fileID: 893785340}
   - component: {fileID: 893785341}
   m_Layer: 0
-  m_Name: simple nav
+  m_Name: Nav + Interactor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

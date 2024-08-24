@@ -22,23 +22,35 @@ MonoBehaviour:
     Input: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
     InputPos:
       serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
+      x: -44
+      y: 174
+      width: 82
+      height: 44
     Output: f41a0545-a719-4e79-bb54-32738958fada
     OutputPos:
       serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
-    Nodes: []
-    Edges: []
+      x: 440
+      y: 174
+      width: 92
+      height: 44
+    Nodes:
+    - NodeID: 81b41c9b-72b1-47c6-8860-ef3946eb628b
+      System: {fileID: 11400000, guid: 6ec7cf8c44c89bf4a897fbcced3492f9, type: 2}
+      Position: {x: 94, y: 141}
+      Size: {x: 89, y: 77}
+    - NodeID: 96ee2300-1b75-429e-bdcd-0dab6a66b8a0
+      System: {fileID: 11400000, guid: 4abd32ae184484e479b6502b9c7b0500, type: 2}
+      Position: {x: 209, y: 141}
+      Size: {x: 162, y: 77}
+    Edges:
+    - FromNode: 81b41c9b-72b1-47c6-8860-ef3946eb628b
+      FromIndex: 0
+      ToNode: 96ee2300-1b75-429e-bdcd-0dab6a66b8a0
+      ToIndex: 0
     Bounds:
       serializedVersion: 2
-      x: 0
+      x: -44
       y: 0
-      width: 0
-      height: 0
+      width: 576
+      height: 218
   IsLeaf: 0
