@@ -1,19 +1,33 @@
 ﻿using System;
 using UnityEngine;
 using Zoompy;
+using Zoompy.Generator;
 
 [Logic(Path="Component/LED")]
 public class LEDLogic : MonoBehaviour, ISignalHook
 {
 	//todo: injectable runtime settings! Through generation settings I guess.
-	public Material OnMaterial;
-	public Material OffMaterial;
+	[SerializeField, HideInInspector]
+	private bool SwitchMaterial;
+	[SerializeField, HideInInspector]
+	private Material OnMaterial;
+	[SerializeField, HideInInspector]
+	private Material OffMaterial;
+	public GameObject OnChild;
+	public GameObject OffChild;
 	private ComponentSystem _parent;
 	private MeshRenderer _mr;
 
 	private void Awake()
 	{
 		_mr = GetComponentInChildren<MeshRenderer>();
+	}
+
+	public void ApplyConfiguration(ComponentSystem cs, GenerationSettings genSettings)
+	{
+		SwitchMaterial = true;
+		OnMaterial = genSettings.litMaterial;
+		OffMaterial = genSettings.unlitMaterial == null ? genSettings.defaultSystemMaterial : genSettings.unlitMaterial;
 	}
 	
 	public void OnAnyInputChange()
@@ -25,7 +39,21 @@ public class LEDLogic : MonoBehaviour, ISignalHook
 	private void UpdateView()
 	{
 		var d = _parent.Inputs[0].GetSignal();
-		_mr.material = d ? OnMaterial : OffMaterial;
+		if (SwitchMaterial)
+		{
+			_mr.material = d ? OnMaterial : OffMaterial;
+		}
+
+		if (OnChild != null)
+		{
+			OnChild.SetActive(d);
+		}
+
+		if (OffChild != null)
+		{
+			OffChild.SetActive(!d);
+		}
+
 	}
 
 	public void OnInputChange(int index, byte data)

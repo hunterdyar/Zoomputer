@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Zoompy;
 using Zoompy.Extensions;
+using Zoompy.Interactors;
+
 [CustomEditor(typeof(Zoompy.Generator.ComponentGenerator))]
 public class ComponentGeneratorEditor : Editor
 {
@@ -30,31 +32,61 @@ public class ComponentGeneratorEditor : Editor
 		var numOuputsElements = new PropertyField(numOutputsProperty);
 		container.Add(numOuputsElements);
 
-		var types = GetSignalHookImplementors();
+		//signalHooks (logic)
+		var signaltypes = GetSignalHookImplementors();
 		container.Add(new Label("Logic"));
-		var propNames = types.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>p.Name).ToList();
-		var propPaths = types.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>(Attribute.GetCustomAttribute(p,typeof(LogicAttribute)) as LogicAttribute).Path).ToList();
-		
+		var propLogicNames = signaltypes.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>p.Name).ToList();
+		var propLogicPaths = signaltypes.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.LogicAttribute))).Select(p=>(Attribute.GetCustomAttribute(p,typeof(LogicAttribute)) as LogicAttribute).Path).ToList();
+		propLogicNames.Insert(0,"None");
+		propLogicPaths.Insert(0,"None");
 		var logicBaseClassNameProperty = serializedObject.FindProperty("baseLogicClassName");
-		int index = propNames.IndexOf(logicBaseClassNameProperty.stringValue);
+		int index = propLogicNames.IndexOf(logicBaseClassNameProperty.stringValue);
 		if (index < 0)
 		{
 			//no correct name set yet.
 			index = 0;
 		}
 		
-		var logicNameDropdown = new DropdownField(propPaths,index,
+		var logicNameDropdown = new DropdownField(propLogicPaths,index,
 			Zoompy.Generator.ComponentGenerator.StripLogicSuffix,
 			Zoompy.Generator.ComponentGenerator.StripLogicSuffix);
 		logicNameDropdown.RegisterValueChangedCallback(e =>
 		{
 			//display the paths, but we want the names.
-			var name = propNames[propPaths.IndexOf(e.newValue)];
+			var name = propLogicNames[propLogicPaths.IndexOf(e.newValue)];
 			((Zoompy.Generator.ComponentGenerator)target).baseLogicClassName = name;
 			serializedObject.ApplyModifiedProperties();
 		});
 		container.Add(logicNameDropdown);
+//
+		var interactorTypes = GetInteractorImplementors();
+		container.Add(new Label("Interactors"));
+		var propInteractorNames = interactorTypes.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.InteractorAttribute)))
+			.Select(p => p.Name).ToList();
+		var propInteractorPaths = interactorTypes.Where(prop => Attribute.IsDefined(prop, typeof(Zoompy.InteractorAttribute)))
+			.Select(p => (Attribute.GetCustomAttribute(p, typeof(InteractorAttribute)) as InteractorAttribute).Path).ToList();
+		propInteractorNames.Insert(0,"None");
+		propInteractorPaths.Insert(0,"None");
+		var interactorBaseClassNameProperty = serializedObject.FindProperty("baseInteractorClassName");
+		index = propInteractorNames.IndexOf(interactorBaseClassNameProperty.stringValue);
+		if (index < 0)
+		{
+			//no correct name set yet.
+			index = 0;
+		}
 
+		var interactorNameDropdown = new DropdownField(propInteractorPaths, index,
+			Zoompy.Generator.ComponentGenerator.StripLogicSuffix,
+			Zoompy.Generator.ComponentGenerator.StripLogicSuffix);
+		interactorNameDropdown.RegisterValueChangedCallback(e =>
+		{
+			//display the paths, but we want the names.
+			var name = propInteractorNames[propInteractorPaths.IndexOf(e.newValue)];
+			((Zoompy.Generator.ComponentGenerator)target).baseInteractorClassName = name;
+			serializedObject.ApplyModifiedProperties();
+		});
+		container.Add(interactorNameDropdown);
+		
 		//
 		var isLeafProp = serializedObject.FindProperty("IsLeaf");
 		var isLeafElement = new PropertyField(isLeafProp);
@@ -80,5 +112,12 @@ public class ComponentGeneratorEditor : Editor
 		var asm = Assembly.GetAssembly(typeof(ISignalHook));
 		var it = typeof(ISignalHook);
 		return asm.GetLoadableTypes().Where(it.IsAssignableFrom).ToList();
+	}
+
+	private IEnumerable<Type> GetInteractorImplementors()
+	{
+		var asm = Assembly.GetAssembly(typeof(IComponentInteractor));
+		var ci = typeof(IComponentInteractor);
+		return asm.GetLoadableTypes().Where(ci.IsAssignableFrom).ToList();
 	}
 }

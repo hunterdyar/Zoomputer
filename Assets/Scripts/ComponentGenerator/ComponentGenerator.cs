@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using Zoompy.Interactors;
 using Zoompy.SystemVisuals;
 
 namespace Zoompy.Generator
@@ -17,7 +18,8 @@ namespace Zoompy.Generator
 		
 		[HideInInspector]
 		public string baseLogicClassName;
-
+		public string baseInteractorClassName;
+		
 		//Visual Details
 		[SerializeField] private GenerationSettings _genSettings;
 
@@ -47,7 +49,7 @@ namespace Zoompy.Generator
 			var g = new GameObject();
 			var cs = g.AddComponent<ComponentSystem>();
 			//set display name
-			string rootName = StripLogicSuffix(baseLogicClassName);
+			string rootName = name;//StripLogicSuffix(baseLogicClassName);
 			cs.SetDisplayName(rootName);
 			g.name = rootName;//may get renamed later.
 			
@@ -56,14 +58,18 @@ namespace Zoompy.Generator
 			
 			//add logic
 			//todo: check for validity
-			var logicType = Type.GetType(baseLogicClassName);
-			if (logicType != null)
+			ISignalHook logic = null;
+			if (baseLogicClassName != "None" && baseLogicClassName !="")
 			{
-				g.AddComponent(logicType);
-			}
-			else
-			{
-				Debug.LogWarning($"Could not GetType: {baseLogicClassName}");
+				var logicType = Type.GetType(baseLogicClassName);
+				if (logicType != null)
+				{
+					logic = (ISignalHook)g.AddComponent(logicType);
+				}
+				else
+				{
+					Debug.LogWarning($"Could not Get Type for Logic: {baseLogicClassName}");
+				}
 			}
 
 			if (numberInputs > 0)
@@ -100,6 +106,33 @@ namespace Zoompy.Generator
 			//connect inner systems with wires.
 			//do this after nodes so we have all the port worldPositions.
 			GenerateWires(cs);
+			
+			//after the rest has been generated.
+			if (logic != null)
+			{
+				logic.ApplyConfiguration(cs,_genSettings);
+			}
+
+			IComponentInteractor interactor = null;
+			if (baseInteractorClassName != "None" && baseInteractorClassName != "")
+			{
+				var interactorType = Type.GetType(baseInteractorClassName);
+				if (interactorType != null)
+				{
+					interactor = (IComponentInteractor)g.AddComponent(interactorType);
+				}
+				else
+				{
+					Debug.LogWarning($"Could not Get Type for Logic: {baseLogicClassName}");
+				}
+
+				if (interactor != null)
+				{
+					//we do configure on start instead of serialized...
+					// interactor.Configure();
+				}
+			}
+			
 			return cs;
 		}
 

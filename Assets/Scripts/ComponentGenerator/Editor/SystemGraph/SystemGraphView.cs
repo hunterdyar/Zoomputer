@@ -81,6 +81,11 @@ namespace Zoompy.Generator.Editor.SystemGraph
 		        return;
 	        }
 
+	        if (_systemParent.IsLeaf)
+	        {
+		        return;
+	        }
+	        
 	        _inputsNodeView = new SystemInputNodeView(ComponentGenerator);
 	        
 	        _inputsNodeView.SetID(_systemParent.InnerSystem.Input);

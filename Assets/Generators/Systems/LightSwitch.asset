@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
+  m_Name: LightSwitch
+  m_EditorClassIdentifier: 
+  numberInputs: 0
+  numberOutputs: 0
+  baseLogicClassName: 
+  baseInteractorClassName: 
+  _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
+  _overrideContainerMaterial: {fileID: 0}
+  InnerSystem:
+    Input: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
+    InputPos:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    Output: f41a0545-a719-4e79-bb54-32738958fada
+    OutputPos:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    Nodes: []
+    Edges: []
+    Bounds:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+  IsLeaf: 0

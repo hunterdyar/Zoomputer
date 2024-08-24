@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Rendering.BuiltIn.ShaderGraph;
 using UnityEngine;
+using Zoompy.Interactors;
 
 namespace Zoompy
 {
@@ -24,6 +25,7 @@ namespace Zoompy
         public ISignalHook BaseLogic => _baseLogic;
         private ISignalHook _baseLogic;
 
+        private IComponentInteractor[] _interactors;
         public string inputNodeID;
         public SignalPort[] Inputs => _inputs;
 
@@ -43,6 +45,7 @@ namespace Zoompy
         private void Awake()
         {
             _baseLogic = GetComponent<ISignalHook>();
+            _interactors = GetComponentsInChildren<IComponentInteractor>();
             _baseLogic?.SetComponenSystem(this);
             
             outsideView.Setup(this);
@@ -63,6 +66,11 @@ namespace Zoompy
 
         void Start()
         {
+            foreach (var interactor in _interactors)
+            {
+                interactor.Configure(this);
+            }
+            
             for (var i = 0; i < _inputs.Length; i++)
             {
                 var input = _inputs[i];
@@ -82,6 +90,13 @@ namespace Zoompy
             }
         }
 
+        public void Interact()
+        {
+            foreach (var interactor in _interactors)
+            {
+                interactor.Interact();
+            }
+        }
         private void OnEnable()
         {
             foreach (var input in _inputs)

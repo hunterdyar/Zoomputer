@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
-  m_Name: LED
+  m_Name: Button
   m_EditorClassIdentifier: 
-  numberInputs: 1
+  numberInputs: 0
   numberOutputs: 1
-  baseLogicClassName: LEDLogic
+  baseLogicClassName: None
+  baseInteractorClassName: ToggleOutputsInteractor
   _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
   _overrideContainerMaterial: {fileID: 0}
   InnerSystem:
-    Input: 
+    Input: 6f9078ff-3663-46e3-860e-6cac82eff477
     InputPos:
       serializedVersion: 2
       x: 0
       y: 0
       width: 0
       height: 0
-    Output: 
+    Output: 3167c11b-8bb2-4d4c-a5e9-04764cdedbc4
     OutputPos:
       serializedVersion: 2
       x: 0

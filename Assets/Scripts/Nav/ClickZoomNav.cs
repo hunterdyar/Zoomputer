@@ -32,8 +32,14 @@ public class ClickZoomNav : MonoBehaviour
             {
                 ZoomInto(view.ComponentSystem);
             }
-        }
-        else
+        }else if (Input.GetMouseButtonDown(1))
+        {
+            if (DidClickOnLayer(out var view))
+            {
+                //check if has interactor, give feedback light highlight.
+                view.ComponentSystem.Interact();
+            }
+        }else
         {
             if (Input.mouseScrollDelta.y < 0)
             {
