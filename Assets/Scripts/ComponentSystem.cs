@@ -37,8 +37,6 @@ namespace Zoompy
 
         [SerializeField] private SignalPort[] _outputs;
         
-        private int _currentView = -1;
-
         public LayerView outsideView;
         public LayerView insideView;
         
@@ -49,6 +47,7 @@ namespace Zoompy
             _baseLogic?.SetComponenSystem(this);
             
             outsideView.Setup(this);
+            
             IsLeaf = insideView == null;
             insideView?.Setup(this);
 
@@ -77,13 +76,14 @@ namespace Zoompy
                 input.ConnectedTo = this;
                 input.ConnectedIndex = i;
             }
-              for (var i = 0; i < _outputs.Length; i++)
+            for (var i = 0; i < _outputs.Length; i++)
             {
                 var input = _outputs[i];
                 input.ConnectedTo = this;
                 input.ConnectedIndex = i;
             }
             outsideView.SetLayerEnabled(true);
+            
             if (!IsLeaf)
             {
                 insideView.SetLayerEnabled(false);
@@ -161,11 +161,6 @@ namespace Zoompy
 
         public void OnInputChange(int index, byte data)
         {
-            if (_currentView == -1)
-            {
-                return;
-            }
-
             if (!_viewingInside || IsLeaf)
             {
                  _baseLogic.OnInputChange(index, data);
