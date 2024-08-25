@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  numberInputs: 0
+  numberOutputs: 0
+  baseLogicClassName: 
+  baseInteractorClassName: 
+  _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
+  _overrideContainerMaterial: {fileID: 0}
+  InnerSystem:
+    Input: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
+    InputPos:
+      serializedVersion: 2
+      x: -44
+      y: 174
+      width: 82
+      height: 44
+    Output: f41a0545-a719-4e79-bb54-32738958fada
+    OutputPos:
+      serializedVersion: 2
+      x: 710
+      y: 230
+      width: 92
+      height: 44
+    Nodes:
+    - NodeID: 81b41c9b-72b1-47c6-8860-ef3946eb628b
+      System: {fileID: 11400000, guid: 6ec7cf8c44c89bf4a897fbcced3492f9, type: 2}
+      Position: {x: 94, y: 141}
+      Size: {x: 89, y: 77}
+    - NodeID: 0d0926e0-5690-4c31-82d5-01c89bf55d4a
+      System: {fileID: 11400000, guid: 4abd32ae184484e479b6502b9c7b0500, type: 2}
+      Position: {x: 467, y: 93}
+      Size: {x: 162, y: 77}
+    - NodeID: 9b9da7ce-6f56-4497-940c-01d049a09ea0
+      System: {fileID: 11400000, guid: 4abd32ae184484e479b6502b9c7b0500, type: 2}
+      Position: {x: 513, y: 252}
+      Size: {x: 162, y: 77}
+    - NodeID: 07f1c2d4-f342-4454-8b55-f09f2542909b
+      System: {fileID: 11400000, guid: 83bc70896df9bcd4399151852aa32440, type: 2}
+      Position: {x: 272, y: 204}
+      Size: {x: 162, y: 125}
+    - NodeID: df5b4a7b-8f11-4155-a975-8625561a02d6
+      System: {fileID: 11400000, guid: 6ec7cf8c44c89bf4a897fbcced3492f9, type: 2}
+      Position: {x: 94, y: 239}
+      Size: {x: 89, y: 77}
+    - NodeID: bf80d6b5-6664-45ce-be7b-3e74c4764966
+      System: {fileID: 11400000, guid: 6ec7cf8c44c89bf4a897fbcced3492f9, type: 2}
+      Position: {x: 94, y: 329}
+      Size: {x: 89, y: 77}
+    Edges:
+    - FromNode: 07f1c2d4-f342-4454-8b55-f09f2542909b
+      FromIndex: 0
+      ToNode: 0d0926e0-5690-4c31-82d5-01c89bf55d4a
+      ToIndex: 0
+    - FromNode: 07f1c2d4-f342-4454-8b55-f09f2542909b
+      FromIndex: 1
+      ToNode: 9b9da7ce-6f56-4497-940c-01d049a09ea0
+      ToIndex: 0
+    - FromNode: 81b41c9b-72b1-47c6-8860-ef3946eb628b
+      FromIndex: 0
+      ToNode: 07f1c2d4-f342-4454-8b55-f09f2542909b
+      ToIndex: 0
+    - FromNode: df5b4a7b-8f11-4155-a975-8625561a02d6
+      FromIndex: 0
+      ToNode: 07f1c2d4-f342-4454-8b55-f09f2542909b
+      ToIndex: 1
+    - FromNode: bf80d6b5-6664-45ce-be7b-3e74c4764966
+      FromIndex: 0
+      ToNode: 07f1c2d4-f342-4454-8b55-f09f2542909b
+      ToIndex: 2
+    Bounds:
+      serializedVersion: 2
+      x: -44
+      y: 0
+      width: 846
+      height: 406
+  IsLeaf: 0

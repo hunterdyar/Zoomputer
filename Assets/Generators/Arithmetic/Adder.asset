@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a9dd81bb454fcc8ae6b6faabaf740e, type: 3}
   m_Name: Adder
   m_EditorClassIdentifier: 
-  numberInputs: 2
+  numberInputs: 3
   numberOutputs: 2
-  baseLogicClassName: 
+  baseLogicClassName: AdderLogic
   baseInteractorClassName: 
   _genSettings: {fileID: 11400000, guid: 225c3f4038745284ebef260b66c3b2aa, type: 2}
   _overrideContainerMaterial: {fileID: 0}
@@ -34,10 +34,6 @@ MonoBehaviour:
       width: 92
       height: 101
     Nodes:
-    - NodeID: 60c46334-99c5-4436-969d-54cf1e69353e
-      System: {fileID: 11400000, guid: b94cb04c19d3ce844bd9aac399b96e71, type: 2}
-      Position: {x: 308, y: 123}
-      Size: {x: 162, y: 101}
     - NodeID: 85c77f7e-82ae-423b-9606-6dda017e352c
       System: {fileID: 11400000, guid: b94cb04c19d3ce844bd9aac399b96e71, type: 2}
       Position: {x: 54, y: 101}
@@ -54,14 +50,10 @@ MonoBehaviour:
       System: {fileID: 11400000, guid: 3a772514967ad8d4fb40ecc417f4ab22, type: 2}
       Position: {x: 541, y: 303}
       Size: {x: 162, y: 101}
-    - NodeID: 7203d996-69ab-48d9-97dc-6df36f5f723a
-      System: {fileID: 11400000, guid: 4abd32ae184484e479b6502b9c7b0500, type: 2}
-      Position: {x: 726, y: 224}
-      Size: {x: 162, y: 77}
-    - NodeID: 65461efd-4c61-40ec-a810-a006d2259c92
-      System: {fileID: 11400000, guid: 4abd32ae184484e479b6502b9c7b0500, type: 2}
-      Position: {x: 726, y: 316}
-      Size: {x: 162, y: 77}
+    - NodeID: 60c46334-99c5-4436-969d-54cf1e69353e
+      System: {fileID: 11400000, guid: b94cb04c19d3ce844bd9aac399b96e71, type: 2}
+      Position: {x: 399, y: 102}
+      Size: {x: 162, y: 101}
     Edges:
     - FromNode: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
       FromIndex: 0
@@ -83,17 +75,13 @@ MonoBehaviour:
       FromIndex: 0
       ToNode: 60c46334-99c5-4436-969d-54cf1e69353e
       ToIndex: 0
-    - FromNode: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
-      FromIndex: 2
-      ToNode: 60c46334-99c5-4436-969d-54cf1e69353e
-      ToIndex: 1
-    - FromNode: 85c77f7e-82ae-423b-9606-6dda017e352c
+    - FromNode: 60c46334-99c5-4436-969d-54cf1e69353e
       FromIndex: 0
-      ToNode: 741c1e1c-6df0-4abf-9f1e-9b94a50cd14c
+      ToNode: f41a0545-a719-4e79-bb54-32738958fada
       ToIndex: 0
-    - FromNode: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
-      FromIndex: 2
-      ToNode: 741c1e1c-6df0-4abf-9f1e-9b94a50cd14c
+    - FromNode: 4f1ee68f-263c-42d3-b18e-6611fa9922de
+      FromIndex: 0
+      ToNode: f41a0545-a719-4e79-bb54-32738958fada
       ToIndex: 1
     - FromNode: 741c1e1c-6df0-4abf-9f1e-9b94a50cd14c
       FromIndex: 0
@@ -103,21 +91,17 @@ MonoBehaviour:
       FromIndex: 0
       ToNode: 4f1ee68f-263c-42d3-b18e-6611fa9922de
       ToIndex: 1
-    - FromNode: 60c46334-99c5-4436-969d-54cf1e69353e
-      FromIndex: 0
-      ToNode: 7203d996-69ab-48d9-97dc-6df36f5f723a
-      ToIndex: 0
-    - FromNode: 4f1ee68f-263c-42d3-b18e-6611fa9922de
-      FromIndex: 0
-      ToNode: 65461efd-4c61-40ec-a810-a006d2259c92
-      ToIndex: 0
-    - FromNode: 65461efd-4c61-40ec-a810-a006d2259c92
-      FromIndex: 0
-      ToNode: f41a0545-a719-4e79-bb54-32738958fada
+    - FromNode: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
+      FromIndex: 2
+      ToNode: 60c46334-99c5-4436-969d-54cf1e69353e
       ToIndex: 1
-    - FromNode: 7203d996-69ab-48d9-97dc-6df36f5f723a
+    - FromNode: ff2ec9ff-6651-4b36-aace-94cbcb2b1f9c
+      FromIndex: 2
+      ToNode: 741c1e1c-6df0-4abf-9f1e-9b94a50cd14c
+      ToIndex: 1
+    - FromNode: 85c77f7e-82ae-423b-9606-6dda017e352c
       FromIndex: 0
-      ToNode: f41a0545-a719-4e79-bb54-32738958fada
+      ToNode: 741c1e1c-6df0-4abf-9f1e-9b94a50cd14c
       ToIndex: 0
     Bounds:
       serializedVersion: 2
