@@ -46,8 +46,10 @@ namespace Zoompy.Generator
 				Debug.LogError("Can't generate, No Generation Settings!");
 				return null;
 			}
+			//make the game object
 			var g = new GameObject();
 			var cs = g.AddComponent<ComponentSystem>();
+			
 			//set display name
 			string rootName = name;//StripLogicSuffix(baseLogicClassName);
 			cs.SetDisplayName(rootName);
@@ -226,6 +228,14 @@ namespace Zoompy.Generator
 			//get max number of ports.
 			int ports = MaxPorts;
 
+			if (ports == 0)
+			{
+				//The inner system use the bounds to set the scale of everything
+				//so... we need to figure out what to do to set a scale for a non-outer thing.
+				
+				//return null;
+			}
+			
 			//configure layer view in contianer
 			var layerg = new GameObject();
 			layerg.name = system.DisplayName + " Outer View";
