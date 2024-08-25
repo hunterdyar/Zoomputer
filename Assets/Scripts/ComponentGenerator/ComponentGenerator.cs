@@ -232,7 +232,7 @@ namespace Zoompy.Generator
 			{
 				//The inner system use the bounds to set the scale of everything
 				//so... we need to figure out what to do to set a scale for a non-outer thing.
-				
+				//the size is also not calculated correctly when ports are zero.
 				//return null;
 			}
 			

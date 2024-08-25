@@ -22,8 +22,8 @@ namespace Zoompy
         public bool IsLeaf { get; private set; }
 
         private bool _viewingInside = false;
-        public ISignalHook BaseLogic => _baseLogic;
-        private ISignalHook _baseLogic;
+        public ISignalHook Logic => _logic;
+        private ISignalHook _logic;
 
         private IComponentInteractor[] _interactors;
         public string inputNodeID;
@@ -40,11 +40,12 @@ namespace Zoompy
         public LayerView outsideView;
         public LayerView insideView;
         
+        //todo: make init function and call from Generate at appriate time.
         private void Awake()
         {
-            _baseLogic = GetComponent<ISignalHook>();
+            _logic = GetComponent<ISignalHook>();
             _interactors = GetComponents<IComponentInteractor>();
-            _baseLogic?.SetComponenSystem(this);
+            _logic?.SetComponenSystem(this);
             
             outsideView.Setup(this);
             
@@ -86,7 +87,14 @@ namespace Zoompy
             
             if (!IsLeaf)
             {
-                insideView.SetLayerEnabled(false);
+                insideView.SetLayerEnabled(_logic == null);
+            }
+
+            //todo: this is a hacky fix for "no outer system" components, which isn't a thing we have conteptually, but do have literally.
+            //can identify them by if we have no ports.
+            if (_inputs.Length + _outputs.Length == 0)
+            {
+                EnterSystem();
             }
         }
 
@@ -151,7 +159,8 @@ namespace Zoompy
             {
                 _viewingInside = false;
                 outsideView.SetLayerEnabled(true);
-                insideView.SetLayerEnabled(false);
+                //todo: some way to keep the logic enabled byt the interactors disabled
+                insideView.SetLayerEnabled(_logic == null);//only turn off if we can replace the logic with something.
                 foreach (var input in _inputs)
                 {
                     input.Refresh();
@@ -163,7 +172,7 @@ namespace Zoompy
         {
             if (!_viewingInside || IsLeaf)
             {
-                 _baseLogic.OnInputChange(index, data);
+                 _logic.OnInputChange(index, data);
             }
         }
 
