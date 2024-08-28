@@ -1,4 +1,4 @@
-﻿namespace Zoompy.Interactors
+﻿namespace Zoompy
 {
 	public interface IComponentInteractor
 	{

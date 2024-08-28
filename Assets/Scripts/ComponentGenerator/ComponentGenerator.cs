@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
-using Zoompy.Interactors;
 using Zoompy.SystemVisuals;
 
 namespace Zoompy.Generator
@@ -135,6 +134,7 @@ namespace Zoompy.Generator
 				}
 			}
 			
+			cs.Init();
 			return cs;
 		}
 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Rendering.BuiltIn.ShaderGraph;
 using UnityEngine;
-using Zoompy.Interactors;
 
 namespace Zoompy
 {
@@ -30,23 +29,28 @@ namespace Zoompy
         public SignalPort[] Inputs => _inputs;
 
         [Header("Connections")]
-        [SerializeField] private SignalPort[] _inputs;
+        [SerializeField] private SignalPort[] _inputs = Array.Empty<SignalPort>();
 
+        private bool _subscribedToInputChanges;
         public string outputNodeID;
         public SignalPort[] Outputs => _outputs;
 
-        [SerializeField] private SignalPort[] _outputs;
+        [SerializeField] private SignalPort[] _outputs = Array.Empty<SignalPort>();
         
         public LayerView outsideView;
         public LayerView insideView;
+
         
-        //todo: make init function and call from Generate at appriate time.
         private void Awake()
         {
             _logic = GetComponent<ISignalHook>();
             _interactors = GetComponents<IComponentInteractor>();
             _logic?.SetComponenSystem(this);
-            
+            _subscribedToInputChanges = false;
+        }
+
+        public void Init()
+        {
             outsideView.Setup(this);
             
             IsLeaf = insideView == null;
@@ -107,18 +111,34 @@ namespace Zoompy
         }
         private void OnEnable()
         {
-            foreach (var input in _inputs)
+            //if innitted...
+            if (_inputs != null && _subscribedToInputChanges)
             {
-                input.OnInputChange += OnInputChange;
+                SubscripeToInputChanges();
             }
         }
 
+        private void SubscripeToInputChanges()
+        {
+            if (gameObject.activeSelf)
+            {
+                foreach (var input in _inputs)
+                {
+                    input.OnInputChange += OnInputChange;
+                }
+
+                _subscribedToInputChanges = true;
+            }
+        }
+        
         private void OnDisable()
         {
             foreach (var input in _inputs)
             {
                 input.OnInputChange -= OnInputChange;
             }
+
+            _subscribedToInputChanges = false;
         }
 
         public void SetDisplayName(string newName)

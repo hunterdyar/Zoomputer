@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Zoompy;
 using Zoompy.Extensions;
-using Zoompy.Interactors;
 
 [CustomEditor(typeof(Zoompy.Generator.ComponentGenerator))]
 public class ComponentGeneratorEditor : Editor
