@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using TMPro;
+using UnityEditor.Networking.PlayerConnection;
+using Zoompy;
 
 //This object is attached to the Panel Prefab
 public class PanelModelController : MonoBehaviour
@@ -44,6 +46,10 @@ public class PanelModelController : MonoBehaviour
     [Min(0)]
     public int numRightPorts;
 
+    //Generation Settings
+    private Bounds _containerBounds;
+    
+    // fields
     private float _drawnWidth;
     public void Redraw(){
         
@@ -102,13 +108,28 @@ public class PanelModelController : MonoBehaviour
         x = portScale / 2f;
         for (int i = 0; i < numRightPorts; i++)
         {
-            var t = Instantiate(PortCapR, transform.position+new Vector3(horizontalExtent, portYPosition, zOffset - headerHeight - x), Quaternion.identity,
-                PortParentRight);
+            var t = Instantiate(PortCapR, transform.position+new Vector3(horizontalExtent, portYPosition, zOffset - headerHeight - x), Quaternion.identity, PortParentRight);
             t.transform.localScale = new Vector3(portScale, portScale, portScale);
             x += (portScale+portGap);
         }
 
         _drawnWidth = width;
+    }
+
+    public void SetToSystem(ZSystem system)
+    {
+        HeaderText.text = system.name;
+        
+        //set the ports tot he SystemPort or what-have-you.
+        numLeftPorts = system.inputs.Length;
+        numRightPorts = system.outputs.Length;
+        width = system.width;
+        
+        float x = Mathf.Lerp(_containerBounds.min.x, _containerBounds.max.x, system.relPosition.x);
+        float z = Mathf.Lerp(_containerBounds.min.z, _containerBounds.max.z, system.relPosition.y);
+        transform.localPosition = new Vector3(x, 0, z);//ypos defined?
+        
+        Redraw();
     }
 
     private void Update()
@@ -127,5 +148,10 @@ public class PanelModelController : MonoBehaviour
         }
 
         return !Mathf.Approximately(_drawnWidth, width); 
+    }
+
+    public void SetWorldContext(Bounds containerBounds)
+    {
+        _containerBounds = containerBounds;
     }
 }

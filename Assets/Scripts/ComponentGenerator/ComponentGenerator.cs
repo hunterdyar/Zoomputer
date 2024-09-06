@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
-using Zoompy.SystemVisuals;
+using Zoompy;
 
 namespace Zoompy.Generator
 {
@@ -28,7 +28,6 @@ namespace Zoompy.Generator
 		//todo: override generated object (buttons, LED's, etc)
 		private int MaxPorts => numberInputs > numberOutputs ? numberInputs : numberOutputs;
 		private float Height() => _genSettings.containerMargin* 2 + MaxPorts* _genSettings.PortSize + (MaxPorts* _genSettings.portgap);
-
 		
 		public SystemDescription InnerSystem;
 		[SerializeField] public bool IsLeaf;
@@ -316,6 +315,58 @@ namespace Zoompy.Generator
 			}
 
 			return s;
+		}
+
+		public ISignalHook GetLogic()
+		{
+			ISignalHook logic = null;
+			if (baseLogicClassName != "None" && baseLogicClassName != "")
+			{
+				var logicType = Type.GetType(baseLogicClassName);
+				if (logicType != null)
+				{
+					//new Logic() oncne not monoBehaviour
+					//logic = (ISignalHook)g.AddComponent(logicType);
+				}
+				else
+				{
+					Debug.LogWarning($"Could not Get Type for Logic: {baseLogicClassName}");
+				}
+			}
+
+			return logic;
+		}
+
+		public ZSystem GetSystem()
+		{
+			ZSystem system = new ZSystem();
+			system.IsLeaf = IsLeaf;
+			system.name = this.name;
+			system.Internals = new ZSystemContainer();
+			system.Internals.Systems = new ZSystem[InnerSystem.Nodes.Length];
+			system.Logic = GetLogic();
+			
+			//pos is set by outer.... see below.
+			system.inputs = new SignalPort[numberInputs];
+			system.outputs = new SignalPort[numberOutputs];
+			
+			
+			//this could be recursive hell
+			if (!system.IsLeaf)
+			{
+				for (int i = 0; i < InnerSystem.Nodes.Length; i++)
+				{
+					system.Internals.Systems[i] = InnerSystem.Nodes[i].System.GetSystem();
+					
+					var pos = new Vector2(
+						Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax, InnerSystem.Nodes[i].Position.x),
+						Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax, InnerSystem.Nodes[i].Position.y));
+					
+					system.Internals.Systems[i].relPosition = pos;
+				}
+			}
+
+			return system;
 		}
 	}
 }

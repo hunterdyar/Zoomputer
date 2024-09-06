@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Zoompy.SystemVisuals
+namespace Zoompy
 {
 	public class ContainerDisplay : MonoBehaviour
 	{
