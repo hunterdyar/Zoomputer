@@ -352,10 +352,12 @@ namespace Zoompy.Generator
 			//
 			system.inputs = new ZConnection[numberInputs];
 			// foreach (var VARIABLE in InnerSystem.Edges.Where(x=>x.ToIndex == ))
-			
-			system.outputs = new ZConnection[numberOutputs];			
+			system.outputs = new ZConnection[numberOutputs];
 			
 			Dictionary<string,ZSystem> map = new Dictionary<string, ZSystem>();
+			map.Add(InnerSystem.Output, system);
+			map.Add(InnerSystem.Input, system);
+			
 			if (!system.IsLeaf)
 			{
 				for (int i = 0; i < InnerSystem.Nodes.Length; i++)
@@ -372,9 +374,16 @@ namespace Zoompy.Generator
 
 				for (int i = 0; i < InnerSystem.Edges.Length; i++)
 				{
-					if (InnerSystem.Edges[i].FromNode == "" || InnerSystem.Edges[i].ToNode == "")
+					//Output connection
+					if (InnerSystem.Edges[i].ToNode == InnerSystem.Output)
 					{
-						continue;
+						//continue;
+					}
+					
+					if (InnerSystem.Edges[i].FromNode == InnerSystem.Input)
+					{
+						//create a connection to this node input
+						//continue;
 					}
 					
 					if (!map.ContainsKey(InnerSystem.Edges[i].FromNode) || !map.ContainsKey(InnerSystem.Edges[i].ToNode))
@@ -383,13 +392,27 @@ namespace Zoompy.Generator
 						continue;
 					}
 					var c = hub.GetConnection();
-
 					var fromn = map[InnerSystem.Edges[i].FromNode];
 					var ton = map[InnerSystem.Edges[i].ToNode];
 					
 					//ZConnection isn't an object, it's just an ID, so we can store it in multiple places.
-					fromn.outputs[InnerSystem.Edges[i].FromIndex] = c;
-					ton.inputs[InnerSystem.Edges[i].ToIndex] = c;
+					if (fromn == system)
+					{
+						fromn.inputs[InnerSystem.Edges[i].FromIndex] = c;
+					}
+					else
+					{
+						fromn.outputs[InnerSystem.Edges[i].FromIndex] = c;
+					}
+
+					if (ton == system)
+					{
+						ton.outputs[InnerSystem.Edges[i].ToIndex] = c;
+					}
+					else
+					{
+						ton.inputs[InnerSystem.Edges[i].ToIndex] = c;
+					}
 
 					system.Internals.Connections[i] = (c, fromn, ton);
 

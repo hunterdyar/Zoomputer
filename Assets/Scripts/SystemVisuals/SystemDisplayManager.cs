@@ -54,6 +54,18 @@ namespace Zoompy
 			for (int i = 0; i < system.Internals.Connections.Length; i++)
 			{
 				var c = system.Internals.Connections[i];
+				if (c.from == system)
+				{
+					//make wire to input port
+					continue;
+				}
+
+				if (c.to == system)
+				{
+					//make wire to output port
+					continue;
+				}
+				
 				var wire = Instantiate(wirePrefab, transform);
 				var from = c.from;
 				var to  = c.to;
