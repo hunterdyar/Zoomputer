@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -345,13 +346,15 @@ namespace Zoompy.Generator
 			system.Internals = new ZSystemContainer();
 			system.Internals.Systems = new ZSystem[InnerSystem.Nodes.Length];
 			system.Logic = GetLogic();
-			
 			//pos is set by outer.... see below.
-			system.inputs = new SignalPort[numberInputs];
-			system.outputs = new SignalPort[numberOutputs];
+
+			//
+			system.inputs = new ZConnection[numberInputs];
+			// foreach (var VARIABLE in InnerSystem.Edges.Where(x=>x.ToIndex == ))
+			
+			system.outputs = new ZConnection[numberOutputs];			
 			
 			
-			//this could be recursive hell
 			if (!system.IsLeaf)
 			{
 				for (int i = 0; i < InnerSystem.Nodes.Length; i++)

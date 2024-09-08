@@ -5,8 +5,10 @@ namespace Zoompy
 	public class ZSystem
 	{
 		public string name;
-		public SignalPort[] inputs;
-		public SignalPort[] outputs;
+		
+		//how are we referencing ports/connections? structs?
+		public ZConnection[] inputs;
+		public ZConnection[] outputs;
 		
 		//Display Information
 		public float width;
@@ -23,5 +25,10 @@ namespace Zoompy
 		//Inner layer definition.
 		public bool IsLeaf;
 		public ZSystemContainer Internals;
+
+		public void Initialize(ConnectionHub hub)
+		{
+			//register ZConnetion Listeners with Logic.
+		}
 	}
 }

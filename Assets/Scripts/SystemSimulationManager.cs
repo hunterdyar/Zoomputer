@@ -9,17 +9,18 @@ namespace Zoompy
 		[SerializeField] private SystemDisplayManager _displayManager;
 		[SerializeField] private ComponentGenerator _outerSystem;
 
-		private ZSystem outermostSystem;
+		private ConnectionHub _connectionHub;
+		private ZSystem _outermostSystem;//todo: rename
 
 		private void Awake()
 		{
-			
+			_connectionHub = new ConnectionHub();
 		}
 
 		private void Start()
 		{
-			outermostSystem = _outerSystem.GetSystem();
-			_displayManager.DisplaySystem(outermostSystem);
+			_outermostSystem = _outerSystem.GetSystem();
+			_displayManager.DisplaySystem(_outermostSystem);
 		}
 	}
 }
