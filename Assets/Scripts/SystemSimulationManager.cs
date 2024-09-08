@@ -19,8 +19,9 @@ namespace Zoompy
 
 		private void Start()
 		{
-			_outermostSystem = _outerSystem.GetSystem();
+			_outermostSystem = _outerSystem.GetSystem(_connectionHub);
 			_displayManager.DisplaySystem(_outermostSystem);
+			//Register Logic
 		}
 	}
 }

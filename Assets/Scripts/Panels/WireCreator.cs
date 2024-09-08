@@ -30,13 +30,18 @@ namespace Zoompy.Panels
 	        _meshRenderer = GetComponent<MeshRenderer>();
 	        _splineContainer = GetComponent<SplineContainer>();
 	        _splineExtrude = GetComponent<SplineExtrude>();
+	        var f = GetComponent<MeshFilter>();
+	        f.mesh = new Mesh();
         }
 
         void Update()
         {
-	        if (_portA.position != _lastADrawPoint || _portB.position != _lastBDrawPoint || _lastDrawCurve != curve) 
+	        if (_portA != null && _portB != null)
 	        {
-		        RedrawWire();
+		        if (_portA.position != _lastADrawPoint || _portB.position != _lastBDrawPoint || _lastDrawCurve != curve)
+		        {
+			        RedrawWire();
+		        }
 	        }
         }
 
@@ -49,7 +54,15 @@ namespace Zoompy.Panels
         public void RedrawWire()
         {
 	        float curveTight = 2;
-	        
+	        if (_portA == null || _portB == null)
+	        {
+		        _meshRenderer.enabled = false;
+		        return;
+	        }
+	        else
+	        {
+		        _meshRenderer.enabled = true;
+	        }
 			_lastADrawPoint = _portA.position;
 			_lastBDrawPoint = _portB.position;
 			_lastDrawCurve = curve;

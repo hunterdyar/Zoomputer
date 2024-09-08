@@ -338,34 +338,61 @@ namespace Zoompy.Generator
 			return logic;
 		}
 
-		public ZSystem GetSystem()
+		public ZSystem GetSystem(ConnectionHub hub)
 		{
 			ZSystem system = new ZSystem();
 			system.IsLeaf = IsLeaf;
 			system.name = this.name;
 			system.Internals = new ZSystemContainer();
 			system.Internals.Systems = new ZSystem[InnerSystem.Nodes.Length];
+			system.Internals.Connections = new (ZConnection,ZSystem,ZSystem)[InnerSystem.Edges.Length];
 			system.Logic = GetLogic();
 			//pos is set by outer.... see below.
-
+			
 			//
 			system.inputs = new ZConnection[numberInputs];
 			// foreach (var VARIABLE in InnerSystem.Edges.Where(x=>x.ToIndex == ))
 			
 			system.outputs = new ZConnection[numberOutputs];			
 			
-			
+			Dictionary<string,ZSystem> map = new Dictionary<string, ZSystem>();
 			if (!system.IsLeaf)
 			{
 				for (int i = 0; i < InnerSystem.Nodes.Length; i++)
 				{
-					system.Internals.Systems[i] = InnerSystem.Nodes[i].System.GetSystem();
+					system.Internals.Systems[i] = InnerSystem.Nodes[i].System.GetSystem(hub);
 					
 					var pos = new Vector2(
 						Mathf.InverseLerp(InnerSystem.Bounds.xMin, InnerSystem.Bounds.xMax, InnerSystem.Nodes[i].Position.x),
 						Mathf.InverseLerp(InnerSystem.Bounds.yMin, InnerSystem.Bounds.yMax, InnerSystem.Nodes[i].Position.y));
 					
 					system.Internals.Systems[i].relPosition = pos;
+					map.Add(InnerSystem.Nodes[i].NodeID, system.Internals.Systems[i]);
+				}
+
+				for (int i = 0; i < InnerSystem.Edges.Length; i++)
+				{
+					if (InnerSystem.Edges[i].FromNode == "" || InnerSystem.Edges[i].ToNode == "")
+					{
+						continue;
+					}
+					
+					if (!map.ContainsKey(InnerSystem.Edges[i].FromNode) || !map.ContainsKey(InnerSystem.Edges[i].ToNode))
+					{
+						Debug.LogWarning($"Edge connected to invalid node? {system.name}");
+						continue;
+					}
+					var c = hub.GetConnection();
+
+					var fromn = map[InnerSystem.Edges[i].FromNode];
+					var ton = map[InnerSystem.Edges[i].ToNode];
+					
+					//ZConnection isn't an object, it's just an ID, so we can store it in multiple places.
+					fromn.outputs[InnerSystem.Edges[i].FromIndex] = c;
+					ton.inputs[InnerSystem.Edges[i].ToIndex] = c;
+
+					system.Internals.Connections[i] = (c, fromn, ton);
+
 				}
 			}
 

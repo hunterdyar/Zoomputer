@@ -20,6 +20,7 @@ namespace Zoompy
 		// public Dictionary<ZConnection, IConnectionListener> ConnectionListeners { get; set; }
 
 		private Impulse _currentImpulse;
+		private int _connIDCount = 0;
 		public void SetAllListeners()
 		{
 			//loop through all connections and set every listener.
@@ -74,6 +75,12 @@ namespace Zoompy
 					Listeners[connectionID].Invoke(connectionID, newData, this);
 				}
 			}
+		}
+
+		public ZConnection GetConnection()
+		{
+			_connIDCount++;
+			return new ZConnection(_connIDCount);
 		}
 	}
 }

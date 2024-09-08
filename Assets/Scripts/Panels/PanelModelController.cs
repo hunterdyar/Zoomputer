@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine;
 using TMPro;
@@ -22,8 +23,9 @@ public class PanelModelController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text HeaderText;
 
-    [Header("Gen Prefabs")]
     //Move these to keep port localPositions simple. (0.5)
+    [Header("Gen Prefabs")]
+
     [SerializeField] private Transform PortParentLeft;
     [SerializeField] private Transform PortParentRight;
 
@@ -48,6 +50,7 @@ public class PanelModelController : MonoBehaviour
 
     //Generation Settings
     private Bounds _containerBounds;
+    private ZSystem _system;
     
     // fields
     private float _drawnWidth;
@@ -118,6 +121,7 @@ public class PanelModelController : MonoBehaviour
 
     public void SetToSystem(ZSystem system)
     {
+        _system = system;
         HeaderText.text = system.name;
         
         //set the ports tot he SystemPort or what-have-you.
@@ -153,5 +157,30 @@ public class PanelModelController : MonoBehaviour
     public void SetWorldContext(Bounds containerBounds)
     {
         _containerBounds = containerBounds;
+    }
+
+    public Transform GetPortTransform(ZConnection connection)
+    {
+        if (_system == null)
+        {
+            Debug.LogError("Can't get port transform, need system set first.");
+            return null;
+        }
+        
+        var i =Array.IndexOf(_system.inputs, connection);
+        if(i >= 0)
+        {
+            //child i, but reverse order.
+            return PortParentLeft.GetChild(PortParentLeft.childCount-1-i);
+        }
+        
+        i =Array.IndexOf(_system.outputs, connection);
+        if(i >= 0)
+        {
+            return PortParentRight.GetChild(PortParentRight.childCount-1-i);
+        }
+
+        Debug.LogError("Can't get port transform");
+        return transform;
     }
 }

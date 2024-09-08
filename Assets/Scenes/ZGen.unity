@@ -170,6 +170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelPrefab: {fileID: 4936500446619031091, guid: 34804815ac0be134abb035ad5d7ea92c,
     type: 3}
+  wirePrefab: {fileID: 9085245411259682511, guid: e1a3037303ba9419c8037322a42d124f,
+    type: 3}
   containerBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 4, y: 1, z: 4}

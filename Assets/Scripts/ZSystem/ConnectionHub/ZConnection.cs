@@ -2,13 +2,28 @@
 
 namespace Zoompy
 {
-	public struct ZConnection
+	public struct ZConnection : IEquatable<ZConnection>
 	{
-		public int id;
+		public readonly int ID;
 
 		public ZConnection(int id)
 		{
-			this.id = id;
+			this.ID = id;
+		}
+
+		public bool Equals(ZConnection other)
+		{
+			return ID == other.ID;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is ZConnection other && Equals(other);
+		}
+
+		public override int GetHashCode()
+		{
+			return ID;
 		}
 	}
 }
