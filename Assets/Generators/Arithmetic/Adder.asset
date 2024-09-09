@@ -24,14 +24,14 @@ MonoBehaviour:
       serializedVersion: 2
       x: -360
       y: 202
-      width: 82
+      width: 81.5
       height: 125
     Output: f41a0545-a719-4e79-bb54-32738958fada
     OutputPos:
       serializedVersion: 2
       x: 954
       y: 203
-      width: 92
+      width: 91.5
       height: 101
     Nodes:
     - NodeID: 85c77f7e-82ae-423b-9606-6dda017e352c
@@ -107,6 +107,6 @@ MonoBehaviour:
       serializedVersion: 2
       x: -360
       y: 0
-      width: 1406
+      width: 1405.5
       height: 527
   IsLeaf: 0

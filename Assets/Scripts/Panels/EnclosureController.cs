@@ -40,7 +40,6 @@ namespace Zoompy
                 right.transform.position = new Vector3(bounds.max.x, outerPortHeight,z);
                 right.SetConnection(hub, system.outputs[i]);
                 _ports.Add(system.outputs[i],right);
-
             }
         }
 

@@ -42,6 +42,7 @@ namespace Zoompy
 			ClearCurrentSystem();
 			
 			_enclosure.SetSystem(system, containerBounds, hub);
+			
 			//draw the header text from system name.
 			//draw the input and output ports.
 			//draw the nodes.
@@ -67,9 +68,16 @@ namespace Zoompy
 					continue;
 				}
 
+				//from ourself means from outer
 				if (c.from == system)
 				{
-					wire._portA = _enclosure.GetPort(c.connection).transform;
+					var w = _enclosure.GetPort(c.connection);
+					if (w == null)
+					{
+						wire.gameObject.SetActive(false);
+						continue;
+					}
+					wire._portA = w.transform;
 				}
 				else
 				{

@@ -391,30 +391,37 @@ namespace Zoompy.Generator
 						Debug.LogWarning($"Edge connected to invalid node? {system.name}");
 						continue;
 					}
-					var c = hub.GetConnection();
-					var fromn = map[InnerSystem.Edges[i].FromNode];
-					var ton = map[InnerSystem.Edges[i].ToNode];
 					
-					//ZConnection isn't an object, it's just an ID, so we can store it in multiple places.
-					if (fromn == system)
+					var c = hub.GetConnection();
+					var fromNode = map[InnerSystem.Edges[i].FromNode];
+					var toNode = map[InnerSystem.Edges[i].ToNode];
+
+					if (fromNode == toNode)
 					{
-						fromn.inputs[InnerSystem.Edges[i].FromIndex] = c;
+						Debug.LogError("Invalid connection to self.");
+						continue;
+					}
+					
+					if (fromNode == system)
+					{
+						//flipped because we are inside the system looking out.
+						fromNode.inputs[InnerSystem.Edges[i].FromIndex] = c;
 					}
 					else
 					{
-						fromn.outputs[InnerSystem.Edges[i].FromIndex] = c;
+						fromNode.outputs[InnerSystem.Edges[i].FromIndex] = c;
 					}
 
-					if (ton == system)
+					if (toNode == system)
 					{
-						ton.outputs[InnerSystem.Edges[i].ToIndex] = c;
+						toNode.outputs[InnerSystem.Edges[i].ToIndex] = c;
 					}
 					else
 					{
-						ton.inputs[InnerSystem.Edges[i].ToIndex] = c;
+						toNode.inputs[InnerSystem.Edges[i].ToIndex] = c;
 					}
 
-					system.Internals.Connections[i] = (c, fromn, ton);
+					system.Internals.Connections[i] = (c, fromNode, toNode);
 
 				}
 			}
