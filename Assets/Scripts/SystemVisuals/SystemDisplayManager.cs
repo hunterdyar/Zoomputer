@@ -9,19 +9,21 @@ namespace Zoompy
 	public class SystemDisplayManager : MonoBehaviour
 	{
 		private ZSystem _currentSystem;
+		private EnclosureController _enclosure;
 		
 		//We can track through the system (step out, etc) but that should be done by some graph handler that can deal with all of our edge cases.
 		public PanelModelController panelPrefab;
 		public WireCreator wirePrefab;
 		
+		
 		public Bounds containerBounds;
 		
 		private Dictionary<ZSystem, PanelModelController> panels = new Dictionary<ZSystem, PanelModelController>();
 		private Dictionary<ZConnection, WireCreator> wires = new Dictionary<ZConnection, WireCreator>();
-		
-		private void Start()
+
+		private void Awake()
 		{
-			
+			_enclosure = GetComponent<EnclosureController>();
 		}
 
 		public void ClearCurrentSystem()
@@ -35,10 +37,11 @@ namespace Zoompy
 			wires.Clear();
 		}
 
-		public void DisplaySystem(ZSystem system)
+		public void DisplaySystem(ConnectionHub hub, ZSystem system)
 		{
 			ClearCurrentSystem();
 			
+			_enclosure.SetSystem(system, containerBounds, hub);
 			//draw the header text from system name.
 			//draw the input and output ports.
 			//draw the nodes.
@@ -54,17 +57,7 @@ namespace Zoompy
 			for (int i = 0; i < system.Internals.Connections.Length; i++)
 			{
 				var c = system.Internals.Connections[i];
-				if (c.from == system)
-				{
-					//make wire to input port
-					continue;
-				}
-
-				if (c.to == system)
-				{
-					//make wire to output port
-					continue;
-				}
+				
 				
 				var wire = Instantiate(wirePrefab, transform);
 				var from = c.from;
@@ -74,9 +67,25 @@ namespace Zoompy
 					continue;
 				}
 
-				wire._portA = panels[from].GetPortTransform(c.connection);
-			
-				wire._portB = panels[to].GetPortTransform(c.connection);
+				if (c.from == system)
+				{
+					wire._portA = _enclosure.GetPort(c.connection).transform;
+				}
+				else
+				{
+					wire._portA = panels[from].GetPortTransform(c.connection);
+				}
+				
+
+				if (c.to == system)
+				{
+					wire._portB = _enclosure.GetPort(c.connection).transform;
+				}
+				else
+				{
+					wire._portB = panels[to].GetPortTransform(c.connection);
+				}
+				
 				
 
 				wires.Add(system.Internals.Connections[i].Item1, wire);

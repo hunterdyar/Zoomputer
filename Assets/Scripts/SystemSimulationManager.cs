@@ -20,7 +20,7 @@ namespace Zoompy
 		private void Start()
 		{
 			_outermostSystem = _outerSystem.GetSystem(_connectionHub);
-			_displayManager.DisplaySystem(_outermostSystem);
+			_displayManager.DisplaySystem(_connectionHub, _outermostSystem);
 			//Register Logic
 		}
 	}
