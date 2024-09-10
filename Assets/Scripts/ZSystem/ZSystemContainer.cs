@@ -5,6 +5,6 @@ namespace Zoompy
 	public class ZSystemContainer
 	{
 		public ZSystem[] Systems;
-		public (ZConnection connection, ZSystem from, ZSystem to)[] Connections;
+		public (ZConnection connection, ZSystem from, ZSystem[] to)[] Connections;
 	}
 }

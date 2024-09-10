@@ -345,7 +345,8 @@ namespace Zoompy.Generator
 			system.name = this.name;
 			system.Internals = new ZSystemContainer();
 			system.Internals.Systems = new ZSystem[InnerSystem.Nodes.Length];
-			system.Internals.Connections = new (ZConnection,ZSystem,ZSystem)[InnerSystem.Edges.Length];
+			List<(ZConnection, ZSystem, ZSystem[])> systemInternalsConnections = new List<(ZConnection,ZSystem, ZSystem[])>();
+
 			system.Logic = GetLogic();
 			//pos is set by outer.... see below.
 			
@@ -372,58 +373,53 @@ namespace Zoompy.Generator
 					map.Add(InnerSystem.Nodes[i].NodeID, system.Internals.Systems[i]);
 				}
 
-				for (int i = 0; i < InnerSystem.Edges.Length; i++)
+				var connections = InnerSystem.Edges.GroupBy(x => x.FromNode + "-" + x.FromIndex);
+				foreach (var connection in connections)
 				{
-					//Output connection
-					if (InnerSystem.Edges[i].ToNode == InnerSystem.Output)
-					{
-						//continue;
-					}
-					
-					if (InnerSystem.Edges[i].FromNode == InnerSystem.Input)
-					{
-						//create a connection to this node input
-						//continue;
-					}
-					
-					if (!map.ContainsKey(InnerSystem.Edges[i].FromNode) || !map.ContainsKey(InnerSystem.Edges[i].ToNode))
-					{
-						Debug.LogWarning($"Edge connected to invalid node? {system.name}");
-						continue;
-					}
-					
 					var c = hub.GetConnection();
-					var fromNode = map[InnerSystem.Edges[i].FromNode];
-					var toNode = map[InnerSystem.Edges[i].ToNode];
+					ZSystem from = default;
+					List<ZSystem> toNodes = new List<ZSystem>();
+					foreach (var edge in connection)
+					{
+						if (!map.ContainsKey(edge.FromNode) || !map.ContainsKey(edge.ToNode))
+						{
+							Debug.LogWarning($"Edge connected to invalid node? {system.name}");
+							continue;
+						}
+						
+						from = map[edge.FromNode];
+						var t = map[edge.ToNode];
+						
+						if (from == t)
+						{
+							Debug.LogError("Invalid connection to self.");
+							continue;
+						}
 
-					if (fromNode == toNode)
-					{
-						Debug.LogError("Invalid connection to self.");
-						continue;
-					}
-					
-					if (fromNode == system)
-					{
-						//flipped because we are inside the system looking out.
-						fromNode.inputs[InnerSystem.Edges[i].FromIndex] = c;
-					}
-					else
-					{
-						fromNode.outputs[InnerSystem.Edges[i].FromIndex] = c;
-					}
+						if (from == system)
+						{
+							//flipped because we are inside the system looking out.
+							from.inputs[edge.FromIndex] = c;
+						}
+						else
+						{
+							from.outputs[edge.FromIndex] = c;
+						}
 
-					if (toNode == system)
-					{
-						toNode.outputs[InnerSystem.Edges[i].ToIndex] = c;
+						if (t == system)
+						{
+							t.outputs[edge.ToIndex] = c;
+						}
+						else
+						{
+							t.inputs[edge.ToIndex] = c;
+						}
+						toNodes.Add(t);
 					}
-					else
-					{
-						toNode.inputs[InnerSystem.Edges[i].ToIndex] = c;
-					}
-
-					system.Internals.Connections[i] = (c, fromNode, toNode);
-
+					systemInternalsConnections.Add((c, from, toNodes.ToArray()));
 				}
+
+				system.Internals.Connections = systemInternalsConnections.ToArray();
 			}
 
 			return system;

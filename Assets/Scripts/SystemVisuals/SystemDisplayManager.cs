@@ -55,48 +55,52 @@ namespace Zoompy
 				panels.Add(system.Internals.Systems[i],panel);
 			}
 
+			//loop through all of the 'from nodes'
 			for (int i = 0; i < system.Internals.Connections.Length; i++)
 			{
 				var c = system.Internals.Connections[i];
-				
-				
-				var wire = Instantiate(wirePrefab, transform);
-				var from = c.from;
-				var to  = c.to;
-				if (from == null || to == null)
-				{
-					continue;
-				}
 
-				//from ourself means from outer
-				if (c.from == system)
+				//make a wire for every 'to node'
+				foreach (var to in c.to)
 				{
-					var w = _enclosure.GetPort(c.connection);
-					if (w == null)
+
+					var wire = Instantiate(wirePrefab, transform);
+					var from = c.from;
+					if (from == null || to == null)
 					{
-						wire.gameObject.SetActive(false);
 						continue;
 					}
-					wire._portA = w.transform;
-				}
-				else
-				{
-					wire._portA = panels[from].GetPortTransform(c.connection);
-				}
-				
 
-				if (c.to == system)
-				{
-					wire._portB = _enclosure.GetPort(c.connection).transform;
-				}
-				else
-				{
-					wire._portB = panels[to].GetPortTransform(c.connection);
-				}
-				
-				
+					//from ourself means from outer
+					if (c.from == system)
+					{
+						var w = _enclosure.GetPort(c.connection);
+						if (w == null)
+						{
+							wire.gameObject.SetActive(false);
+							continue;
+						}
 
-				wires.Add(system.Internals.Connections[i].Item1, wire);
+						wire._portA = w.transform;
+					}
+					else
+					{
+						wire._portA = panels[from].GetPortTransform(c.connection);
+					}
+
+
+					if (to == system)
+					{
+						wire._portB = _enclosure.GetPort(c.connection).transform;
+					}
+					else
+					{
+						wire._portB = panels[to].GetPortTransform(c.connection);
+					}
+
+					wires.Add(system.Internals.Connections[i].Item1, wire);
+
+				}
 			}
 		}
 	}
