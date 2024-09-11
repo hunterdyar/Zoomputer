@@ -5,29 +5,12 @@ using System.IO;
 using UnityEngine;
 using Zoompy;
 
-[Logic(Path="Gate/Not")]
-public class NotLogic : MonoBehaviour, ISignalHook
+[Logic(Path = "Gate/Not")]
+public class NotLogic : Logic
 {
-    private ComponentSystem _parent;
-
-    //todo: validate input counts
-    
-    public void SetComponenSystem(ComponentSystem parent)
-    {
-        this._parent = parent;
-    }
-
-    public void OnAnyInputChange()
-    {
-        //loop through all connections and match the same output
-        _parent.Outputs[0].SetSignal(_parent.Inputs[0].GetSignal()==false);
-    }
-
-    public void OnInputChange(int index, byte data)
-    {
-        if (_parent != null)
-        {
-            _parent.Outputs[index].SetSignal(data == 0);
-        }
-    }
+	public override void OnInputChange(ZConnection c, byte d)
+	{
+		_hub.SetConnection(_system.Outputs[0], d == 1 ? (byte)0 : (byte)1);
+	}
 }
+

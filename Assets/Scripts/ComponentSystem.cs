@@ -21,8 +21,8 @@ namespace Zoompy
         public bool IsLeaf { get; private set; }
 
         private bool _viewingInside = false;
-        public ISignalHook Logic => _logic;
-        private ISignalHook _logic;
+        public Logic Logic => _logic;
+        private Logic _logic;
 
         private IComponentInteractor[] _interactors;
         public string inputNodeID;
@@ -43,9 +43,9 @@ namespace Zoompy
         
         private void Awake()
         {
-            _logic = GetComponent<ISignalHook>();
+            _logic = GetComponent<Logic>();
             _interactors = GetComponents<IComponentInteractor>();
-            _logic?.SetComponenSystem(this);
+       //     _logic?.SetZSystem(this);
             _subscribedToInputChanges = false;
         }
 
@@ -192,7 +192,7 @@ namespace Zoompy
         {
             if (!_viewingInside || IsLeaf)
             {
-                 _logic.OnInputChange(index, data);
+            //     _logic.OnInputChange(index, data);
             }
         }
 

@@ -125,8 +125,8 @@ public class PanelModelController : MonoBehaviour
         HeaderText.text = system.name;
         
         //set the ports tot he SystemPort or what-have-you.
-        numLeftPorts = system.inputs.Length;
-        numRightPorts = system.outputs.Length;
+        numLeftPorts = system.Inputs.Length;
+        numRightPorts = system.Outputs.Length;
         width = system.width;
         
         float x = Mathf.Lerp(_containerBounds.min.x, _containerBounds.max.x, system.relPosition.x);
@@ -166,15 +166,15 @@ public class PanelModelController : MonoBehaviour
             Debug.LogError("Can't get port transform, need system set first.");
             return null;
         }
-        
-        var i =Array.IndexOf(_system.inputs, connection);
+        //todo: move the IndexOf to connection internal
+        var i =Array.IndexOf(_system.Inputs, connection);
         if(i >= 0)
         {
             //child i, but reverse order.
             return PortParentLeft.GetChild(PortParentLeft.childCount-1-i);
         }
         
-        i =Array.IndexOf(_system.outputs, connection);
+        i =Array.IndexOf(_system.Outputs, connection);
         if(i >= 0)
         {
             return PortParentRight.GetChild(PortParentRight.childCount-1-i);

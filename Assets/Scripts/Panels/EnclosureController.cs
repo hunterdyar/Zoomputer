@@ -24,22 +24,22 @@ namespace Zoompy
             
             //Create the outer ports.
             
-            for (int i = 0; i < system.inputs.Length; i++)
+            for (int i = 0; i < system.InternalInputs.Length; i++)
             {
                 var left = Instantiate(LeftPortPrefab, transform);
-                float z = Mathf.Lerp(bounds.min.z,bounds.max.z,(i+2f)/(float)(system.inputs.Length+2));
+                float z = Mathf.Lerp(bounds.min.z,bounds.max.z,(i+2f)/(float)(system.InternalInputs.Length+2));
                 left.transform.position = new Vector3(bounds.min.x, outerPortHeight,z);
-                left.SetConnection(hub, system.inputs[i]);
-                _ports.Add(system.inputs[i],left);
+                left.SetConnection(hub, system.InternalInputs[i]);
+                _ports.Add(system.InternalInputs[i],left);
             }
             
-            for (int i = 0; i < system.outputs.Length; i++)
+            for (int i = 0; i < system.InternalOutputs.Length; i++)
             {
                 var right = Instantiate(RightPortPrefab, transform);
-                float z = Mathf.Lerp(bounds.min.z,bounds.max.z,(i+2f)/(float)(system.outputs.Length+2));
+                float z = Mathf.Lerp(bounds.min.z,bounds.max.z,(i+2f)/(float)(system.InternalOutputs.Length+2));
                 right.transform.position = new Vector3(bounds.max.x, outerPortHeight,z);
-                right.SetConnection(hub, system.outputs[i]);
-                _ports.Add(system.outputs[i],right);
+                right.SetConnection(hub, system.InternalOutputs[i]);
+                _ports.Add(system.InternalOutputs[i],right);
             }
         }
 

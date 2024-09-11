@@ -5,15 +5,16 @@ namespace Zoompy
 	public struct ZConnection : IEquatable<ZConnection>
 	{
 		public readonly int ID;
-
-		public ZConnection(int id)
+		public int FromIndex;
+		public ZConnection(int id, int index = 0)
 		{
 			this.ID = id;
+			FromIndex = index;
 		}
 
 		public bool Equals(ZConnection other)
 		{
-			return ID == other.ID;
+			return ID == other.ID && FromIndex == other.FromIndex;
 		}
 
 		public override bool Equals(object obj)

@@ -59,18 +59,18 @@ namespace Zoompy.Generator
 			
 			//add logic
 			//todo: check for validity
-			ISignalHook logic = null;
+			// Logic logic = null;
 			if (baseLogicClassName != "None" && baseLogicClassName !="")
 			{
-				var logicType = Type.GetType(baseLogicClassName);
-				if (logicType != null)
-				{
-					logic = (ISignalHook)g.AddComponent(logicType);
-				}
-				else
-				{
-					Debug.LogWarning($"Could not Get Type for Logic: {baseLogicClassName}");
-				}
+				// var logicType = Type.GetType(baseLogicClassName);
+				// if (logicType != null)
+				// {
+				// 	logic = (Logic)g.AddComponent(logicType);
+				// }
+				// else
+				// {
+				// 	Debug.LogWarning($"Could not Get Type for Logic: {baseLogicClassName}");
+				// }
 			}
 
 			if (numberInputs > 0)
@@ -107,12 +107,12 @@ namespace Zoompy.Generator
 			//connect inner systems with wires.
 			//do this after nodes so we have all the port worldPositions.
 			GenerateWires(cs);
-			
-			//after the rest has been generated.
-			if (logic != null)
-			{
-				logic.ApplyConfiguration(cs,_genSettings);
-			}
+			//
+			// //after the rest has been generated.
+			// if (logic != null)
+			// {
+			// 	logic.ApplyConfiguration(cs,_genSettings);
+			// }
 
 			IComponentInteractor interactor = null;
 			if (baseInteractorClassName != "None" && !string.IsNullOrEmpty(baseInteractorClassName))
@@ -318,16 +318,15 @@ namespace Zoompy.Generator
 			return s;
 		}
 
-		public ISignalHook GetLogic()
+		public Logic GetLogic()
 		{
-			ISignalHook logic = null;
+			Logic logic = null;
 			if (baseLogicClassName != "None" && baseLogicClassName != "")
 			{
 				var logicType = Type.GetType(baseLogicClassName);
 				if (logicType != null)
 				{
-					//new Logic() oncne not monoBehaviour
-					//logic = (ISignalHook)g.AddComponent(logicType);
+					logic = (Logic)Activator.CreateInstance(logicType);
 				}
 				else
 				{
@@ -341,20 +340,30 @@ namespace Zoompy.Generator
 		public ZSystem GetSystem(ConnectionHub hub)
 		{
 			ZSystem system = new ZSystem();
+			
+			//basic variables
 			system.IsLeaf = IsLeaf;
 			system.name = this.name;
 			system.Internals = new ZSystemContainer();
 			system.Internals.Systems = new ZSystem[InnerSystem.Nodes.Length];
+
+			
+			
+			//connections and internals
 			List<(ZConnection, ZSystem, ZSystem[])> systemInternalsConnections = new List<(ZConnection,ZSystem, ZSystem[])>();
 
 			system.Logic = GetLogic();
 			//pos is set by outer.... see below.
 			
 			//
-			system.inputs = new ZConnection[numberInputs];
+			system.Outputs = new ZConnection[numberOutputs];
+			system.InternalOutputs = new ZConnection[numberOutputs];
+
+			system.Inputs = new ZConnection[numberInputs];
+			system.InternalInputs = new ZConnection[numberInputs];
+
 			// foreach (var VARIABLE in InnerSystem.Edges.Where(x=>x.ToIndex == ))
-			system.outputs = new ZConnection[numberOutputs];
-			
+
 			Dictionary<string,ZSystem> map = new Dictionary<string, ZSystem>();
 			map.Add(InnerSystem.Output, system);
 			map.Add(InnerSystem.Input, system);
@@ -376,7 +385,7 @@ namespace Zoompy.Generator
 				var connections = InnerSystem.Edges.GroupBy(x => x.FromNode + "-" + x.FromIndex);
 				foreach (var connection in connections)
 				{
-					var c = hub.GetConnection();
+					var c = hub.GetNewConnectionFactory();
 					ZSystem from = default;
 					List<ZSystem> toNodes = new List<ZSystem>();
 					foreach (var edge in connection)
@@ -388,6 +397,7 @@ namespace Zoompy.Generator
 						}
 						
 						from = map[edge.FromNode];
+						c.FromIndex = edge.FromIndex;
 						var t = map[edge.ToNode];
 						
 						if (from == t)
@@ -399,20 +409,20 @@ namespace Zoompy.Generator
 						if (from == system)
 						{
 							//flipped because we are inside the system looking out.
-							from.inputs[edge.FromIndex] = c;
+							from.InternalInputs[edge.FromIndex] = c;
 						}
 						else
 						{
-							from.outputs[edge.FromIndex] = c;
+							from.Outputs[edge.FromIndex] = c;
 						}
 
 						if (t == system)
 						{
-							t.outputs[edge.ToIndex] = c;
+							t.InternalOutputs[edge.ToIndex] = c;
 						}
 						else
 						{
-							t.inputs[edge.ToIndex] = c;
+							t.Inputs[edge.ToIndex] = c;
 						}
 						toNodes.Add(t);
 					}

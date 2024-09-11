@@ -108,8 +108,8 @@ public class ComponentGeneratorEditor : Editor
 
 	private IEnumerable<Type> GetSignalHookImplementors()
 	{
-		var asm = Assembly.GetAssembly(typeof(ISignalHook));
-		var it = typeof(ISignalHook);
+		var asm = Assembly.GetAssembly(typeof(Logic));
+		var it = typeof(Logic);
 		return asm.GetLoadableTypes().Where(it.IsAssignableFrom).ToList();
 	}
 

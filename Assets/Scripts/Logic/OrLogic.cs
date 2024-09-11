@@ -3,37 +3,12 @@ using UnityEngine;
 using Zoompy;
 
 [Logic(Path="Gate/Or")]
-public class OrLogic : MonoBehaviour, ISignalHook
+public class OrLogic :Logic
 {
-	private ComponentSystem _parent;
-
-	//todo: validate input counts
-
-	public void SetComponenSystem(ComponentSystem parent)
+	public override void OnInputChange(ZConnection c, byte d)
 	{
-		this._parent = parent;
-	}
-
-	private void OnEnable()
-	{
-		if (_parent != null)
-		{
-			OnAnyInputChange();
-		}
-	}
-
-	public void OnAnyInputChange()
-	{
-		if (_parent == null)
-		{
-			Debug.LogWarning("No component system set/initialized for logic", this);
-			return;
-		}
-		_parent.Outputs[0].SetSignal((_parent.Inputs[0].GetSignal()) || (_parent.Inputs[1].GetSignal()));
-	}
-
-	public void OnInputChange(int index, byte data)
-	{
-		OnAnyInputChange();
+		var a = _hub.Get(_system.Inputs[0]) != 0;
+		var b = _hub.Get(_system.Inputs[1]) != 0;
+		_hub.SetConnection(_system.Outputs[0], (a || b) ? (byte)1 : (byte)0);
 	}
 }

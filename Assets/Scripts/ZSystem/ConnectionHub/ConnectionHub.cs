@@ -13,14 +13,34 @@ namespace Zoompy
 	public class ConnectionHub
 	{
 		//the current state of the system. This is 
-		public Dictionary<ZConnection, byte> ConnectionData { get; set; }
-		public Dictionary<ZConnection, Action<ZConnection, byte, ConnectionHub>> Listeners { get; set; }
+		private readonly Dictionary<ZConnection, byte> _connectionData = new Dictionary<ZConnection, byte>();
+		private readonly Dictionary<ZConnection, Action<ZConnection, byte, ConnectionHub>> _listeners = new Dictionary<ZConnection, Action<ZConnection, byte, ConnectionHub>>();
 		
 		private readonly List<Impulse> _impulses = new List<Impulse>();
 		// public Dictionary<ZConnection, IConnectionListener> ConnectionListeners { get; set; }
 
 		private Impulse _currentImpulse;
 		private int _connIDCount = 0;
+
+		public void RegisterListener(ZConnection connectionID, Action<ZConnection, byte, ConnectionHub> listener)
+		{
+			if (_listeners.ContainsKey(connectionID))
+			{
+				_listeners[connectionID] += listener;
+			}
+			else
+			{
+				_listeners.Add(connectionID, listener);
+			}
+		}
+		public void RemoveListener(ZConnection connectionID, Action<ZConnection, byte, ConnectionHub> listener)
+		{
+			if (_listeners.ContainsKey(connectionID))
+			{
+				_listeners[connectionID] -= listener;
+			}
+		}
+		
 		public void SetAllListeners()
 		{
 			//loop through all connections and set every listener.
@@ -52,15 +72,15 @@ namespace Zoompy
 		{
 			//Set the data.
 			bool didChange = false;
-			if (ConnectionData.ContainsKey(connectionID))
+			if (_connectionData.ContainsKey(connectionID))
 			{ 
-				didChange = ConnectionData[connectionID] != newData;
-				ConnectionData[connectionID] = newData;
+				didChange = _connectionData[connectionID] != newData;
+				_connectionData[connectionID] = newData;
 			}
 			else
 			{
 				didChange = true;
-				ConnectionData.Add(connectionID, newData);
+				_connectionData.Add(connectionID, newData);
 			}
 
 			//todo: recursion safety check. Check our currentImpulse to see if a state updates to itself.
@@ -70,17 +90,28 @@ namespace Zoompy
 			if (didChange || !onlyUpdateIfChanged)
 			{
 				//propogate the state.
-				if (Listeners.ContainsKey(connectionID))
+				if (_listeners.ContainsKey(connectionID))
 				{
-					Listeners[connectionID].Invoke(connectionID, newData, this);
+					_listeners[connectionID].Invoke(connectionID, newData, this);
 				}
 			}
 		}
 
-		public ZConnection GetConnection()
+		public void SetConnection(ZConnection connectionID, bool newData, bool onlyUpdateIfChanged = true)
+		{
+			SetConnection(connectionID, newData ? (byte)1 : (byte)0, onlyUpdateIfChanged);
+		}
+
+
+		public ZConnection GetNewConnectionFactory()
 		{
 			_connIDCount++;
 			return new ZConnection(_connIDCount);
+		}
+
+		public byte Get(ZConnection zConnection)
+		{
+			return _connectionData[zConnection];
 		}
 	}
 }

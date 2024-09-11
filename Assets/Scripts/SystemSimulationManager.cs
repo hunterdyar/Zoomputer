@@ -21,7 +21,12 @@ namespace Zoompy
 		{
 			_outermostSystem = _outerSystem.GetSystem(_connectionHub);
 			_displayManager.DisplaySystem(_connectionHub, _outermostSystem);
-			//Register Logic
+			_outermostSystem.Initialize(_connectionHub);
+
+			foreach (var input in _outermostSystem.Inputs)
+			{
+				_connectionHub.Impulse(input, 0);
+			}
 		}
 	}
 }
