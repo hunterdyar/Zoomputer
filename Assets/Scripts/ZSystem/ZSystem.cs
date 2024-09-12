@@ -70,7 +70,7 @@ namespace Zoompy
 		{
 			foreach (var input in Inputs)
 			{
-				hub.RegisterListener(input, OnExternalInputChange);
+				hub.RegisterSystemListener(input, OnExternalInputChange);
 			}
 		}
 

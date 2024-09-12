@@ -22,7 +22,8 @@ namespace Zoompy
 		private Impulse _currentImpulse;
 		private int _connIDCount = 0;
 
-		public void RegisterListener(ZConnection connectionID, Action<ZConnection, byte, ConnectionHub> listener)
+		//todo: rename these to ... something else. These are part 
+		public void RegisterSystemListener(ZConnection connectionID, Action<ZConnection, byte, ConnectionHub> listener)
 		{
 			if (_listeners.ContainsKey(connectionID))
 			{
@@ -33,7 +34,7 @@ namespace Zoompy
 				_listeners.Add(connectionID, listener);
 			}
 		}
-		public void RemoveListener(ZConnection connectionID, Action<ZConnection, byte, ConnectionHub> listener)
+		public void RemoveSystemListener(ZConnection connectionID, Action<ZConnection, byte, ConnectionHub> listener)
 		{
 			if (_listeners.ContainsKey(connectionID))
 			{
@@ -53,9 +54,18 @@ namespace Zoompy
 			//When data propogates (a callback from ZSystem basically), we update currentImpulse.
 			//we add it to our Impulse object, which we store for tracking.
 			
+			//Update the visuals and other reactive listeners.
+			foreach (var changed in _currentImpulse.GetChangedConnections())
+			{
+				//todo: broadcast updates of the changed for visual (passive) listeners.
+				//we can keep an Action<byte> on the Connection
+				changed.OnDidChangedAfterImpulse?.Invoke(_connectionData[changed]);
+			}
+			
 			//after that happens, the code call is back here, and we ... finish.
 			_impulses.Add(_currentImpulse);
 			Debug.Log(_currentImpulse.Changes.Count);
+			
 		}
 
 				
@@ -77,8 +87,7 @@ namespace Zoompy
 				_connectionData.Add(connectionID, newData);
 			}
 
-			//todo: recursion safety check. Check our currentImpulse to see if a state updates to itself.
-			_currentImpulse.Mark(connectionID, newData);
+			_currentImpulse.Mark(connectionID, newData, didChange);
 
 			//broadcast the changes.
 			if (didChange || !onlyUpdateIfChanged)

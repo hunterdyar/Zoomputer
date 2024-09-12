@@ -6,6 +6,7 @@ namespace Zoompy
 	{
 		public readonly int ID;
 		public int FromIndex;
+		public Action<byte> OnDidChangedAfterImpulse;//Called after the entire system has propogated, for passive listeners.
 		public ZConnection(int id, int index = 0)
 		{
 			this.ID = id;
