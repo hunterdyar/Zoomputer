@@ -41,12 +41,6 @@ namespace Zoompy
 			}
 		}
 		
-		public void SetAllListeners()
-		{
-			//loop through all connections and set every listener.
-			
-		}
-		
 		//Conn
 		public void Impulse(ZConnection connectionID, byte newData)
 		{
@@ -111,7 +105,16 @@ namespace Zoompy
 
 		public byte Get(ZConnection zConnection)
 		{
-			return _connectionData[zConnection];
+			if (_connectionData.ContainsKey(zConnection))
+			{
+				return _connectionData[zConnection];
+			}
+			else
+			{
+				Debug.LogWarning($"Unable to get value of connection {zConnection}");
+				//todo: I think this bug is the internal/external connections not being registered correctly?
+				return 0;
+			}
 		}
 	}
 }

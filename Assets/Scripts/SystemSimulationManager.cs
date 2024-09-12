@@ -28,5 +28,30 @@ namespace Zoompy
 				_connectionHub.Impulse(input, 0);
 			}
 		}
+
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+			{
+				_connectionHub.Impulse(_outermostSystem.Inputs[0], (byte)Mathf.Abs(1-_connectionHub.Get(_outermostSystem.Inputs[1])));
+				Debug.Log(_connectionHub.Get(_outermostSystem.Outputs[0]));
+			}
+
+			if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+			{
+				_connectionHub.Impulse(_outermostSystem.Inputs[1],
+					(byte)Mathf.Abs(1 - _connectionHub.Get(_outermostSystem.Inputs[1])));
+				Debug.Log(_connectionHub.Get(_outermostSystem.Outputs[0]));
+
+			}
+
+			if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+			{
+				_connectionHub.Impulse(_outermostSystem.Inputs[2],
+					(byte)Mathf.Abs(1 - _connectionHub.Get(_outermostSystem.Inputs[1])));
+				Debug.Log(_connectionHub.Get(_outermostSystem.Outputs[0]));
+
+			}
+		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Zoompy
 		public Bounds containerBounds;
 		
 		private Dictionary<ZSystem, PanelModelController> panels = new Dictionary<ZSystem, PanelModelController>();
-		private Dictionary<ZConnection, WireCreator> wires = new Dictionary<ZConnection, WireCreator>();
+		//private Dictionary<ZConnection, WireCreator> wires = new Dictionary<ZConnection, WireCreator>();
 
 		private void Awake()
 		{
@@ -34,7 +34,7 @@ namespace Zoompy
 				Destroy(child.gameObject);
 			}
 			panels.Clear();
-			wires.Clear();
+			//wires.Clear();
 		}
 
 		public void DisplaySystem(ConnectionHub hub, ZSystem system)
@@ -58,12 +58,12 @@ namespace Zoompy
 			//loop through all of the 'from nodes'
 			for (int i = 0; i < system.Internals.Connections.Length; i++)
 			{
+				
 				var c = system.Internals.Connections[i];
 
 				//make a wire for every 'to node'
 				foreach (var to in c.to)
 				{
-
 					var wire = Instantiate(wirePrefab, transform);
 					var from = c.from;
 					if (from == null || to == null)
@@ -98,7 +98,7 @@ namespace Zoompy
 						wire._portB = panels[to].GetPortTransform(c.connection);
 					}
 
-					wires.Add(system.Internals.Connections[i].Item1, wire);
+				//	wires.Add(c.connection, wire);
 
 				}
 			}

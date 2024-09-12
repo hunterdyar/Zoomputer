@@ -50,10 +50,11 @@ namespace Zoompy
 			}
 			
 			//check if !IsLeaf and Logic is not null safety.
-			if (!IsLeaf && Logic != null)
+			if (Logic != null)
 			{
 				Logic.SetZSystem(this, hub);
 			}
+
 
 			//set to true by default for all systems that have logic.
 			RunInternal = !IsLeaf;
@@ -87,7 +88,14 @@ namespace Zoompy
 			else
 			{
 				//logic.Invoke.
-				Logic.OnInputChange(c, d);
+				if (Logic != null)
+				{
+					Logic.OnInputChange(c, d);
+				}
+				else
+				{
+					Debug.LogError($"Could not run logic on {this}!");
+				}
 			}
 		}
 	}
