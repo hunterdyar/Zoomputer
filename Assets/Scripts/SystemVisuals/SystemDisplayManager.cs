@@ -66,6 +66,7 @@ namespace Zoompy
 				{
 					var wire = Instantiate(wirePrefab, transform);
 					var from = c.from;
+					wire.SetConnection(hub, c.connection);
 					if (from == null || to == null)
 					{
 						continue;
@@ -80,7 +81,7 @@ namespace Zoompy
 							wire.gameObject.SetActive(false);
 							continue;
 						}
-
+						//todo: rename or write functions
 						wire._portA = w.transform;
 					}
 					else
