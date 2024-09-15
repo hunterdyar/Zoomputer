@@ -167,6 +167,8 @@ namespace Zoompy.Panels
 	        
 	        //
 	        _splineExtrude.Rebuild();
+
+			gameObject.name = $"Wire [{_portA.gameObject.name}] -> [{_portB.gameObject.name}]";
         }
 
         private void OnDestroy()

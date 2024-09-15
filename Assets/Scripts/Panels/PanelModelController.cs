@@ -106,6 +106,7 @@ public class PanelModelController : MonoBehaviour
             var t =Instantiate(PortCapL, transform.position+new Vector3(-horizontalExtent, portYPosition, zOffset - headerHeight - x), Quaternion.identity,PortParentLeft);
             x += portScale+portGap;
             t.transform.localScale = new Vector3(portScale, portScale, portScale);
+            t.gameObject.name = $"Port-in {i}";
         }
 
         x = portScale / 2f;
@@ -114,6 +115,7 @@ public class PanelModelController : MonoBehaviour
             var t = Instantiate(PortCapR, transform.position+new Vector3(horizontalExtent, portYPosition, zOffset - headerHeight - x), Quaternion.identity, PortParentRight);
             t.transform.localScale = new Vector3(portScale, portScale, portScale);
             x += (portScale+portGap);
+            t.gameObject.name = $"Port-out {i}";
         }
 
         _drawnWidth = width;
