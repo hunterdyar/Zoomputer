@@ -27,6 +27,9 @@
 .vs/
 .idea/
 
+# Read by some editors, using locally on machines
+.ignore
+
 # Gradle cache directory
 .gradle/
 
