@@ -5,7 +5,7 @@ using UnityEngine.Splines;
 
 namespace Zoompy.Panels
 {
-	public class WireCreator : MonoBehaviour
+	public class WireCreator : MonoBehaviour, IConnectionListener
 	{
 		//Generate Connections
 		//Connection -> 90turn to height of other connection, 90turn, connect. 
@@ -13,10 +13,17 @@ namespace Zoompy.Panels
 		//1. Figure out how to create knots that do the correct radius
 		//2. Figure out how to decide where to place these knots to make it good. 
         
-        public Transform _portA;
-        public Transform _portB;
         [Min(0)]
         public float curve = 0.4f;
+
+        public Material OnMaterial;
+        public Material OffMaterial;
+        
+        [Header("Runtime")]
+		public Transform _portA;
+        public Transform _portB;
+        
+        
         
         private MeshRenderer _meshRenderer;
         private SplineContainer _splineContainer;
@@ -25,6 +32,11 @@ namespace Zoompy.Panels
         private float _lastDrawCurve;
         private Vector3 _lastADrawPoint;
         private Vector3 _lastBDrawPoint;
+
+        //runtime reference
+        private ZConnection _connection;
+        private ConnectionHub _hub;
+
         private void Awake()
         {
 	        _meshRenderer = GetComponent<MeshRenderer>();
@@ -42,6 +54,25 @@ namespace Zoompy.Panels
 		        {
 			        RedrawWire();
 		        }
+	        }
+        }
+
+        public void SetConnection(ConnectionHub hub, ZConnection connection)
+        {
+	        _hub = hub;
+	        _connection = connection;
+	        hub.RegisterChangeListener(connection, this);
+        }
+        
+        public void OnConnectionDidChange(ZConnection connection, byte data)
+        {
+	        if (data > 0)
+	        {
+		        _meshRenderer.material = OnMaterial;
+	        }
+	        else
+	        {
+		        _meshRenderer.material = OffMaterial;
 	        }
         }
 
@@ -136,6 +167,11 @@ namespace Zoompy.Panels
 	        
 	        //
 	        _splineExtrude.Rebuild();
+        }
+
+        private void OnDestroy()
+        {
+	        _hub.DeregisterChangeListener(_connection, this);
         }
 	}
 }

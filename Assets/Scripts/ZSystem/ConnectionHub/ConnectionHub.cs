@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zoompy.Panels;
 
 namespace Zoompy
 {
@@ -15,7 +16,7 @@ namespace Zoompy
 		//the current state of the system. This is 
 		private readonly Dictionary<ZConnection, byte> _connectionData = new Dictionary<ZConnection, byte>();
 		private readonly Dictionary<ZConnection, Action<ZConnection, byte, ConnectionHub>> _listeners = new Dictionary<ZConnection, Action<ZConnection, byte, ConnectionHub>>();
-		
+		private readonly Dictionary<ZConnection, List<IConnectionListener>> _changeListeners = new Dictionary<ZConnection, List<IConnectionListener>>();
 		private readonly List<Impulse> _impulses = new List<Impulse>();
 		// public Dictionary<ZConnection, IConnectionListener> ConnectionListeners { get; set; }
 
@@ -43,7 +44,7 @@ namespace Zoompy
 		}
 		
 		//Conn
-		public void Impulse(ZConnection connectionID, byte newData)
+		public Impulse Impulse(ZConnection connectionID, byte newData)
 		{
 			//create a new Impulse object.
 			_currentImpulse = new Impulse();
@@ -52,20 +53,39 @@ namespace Zoompy
 			SetConnection(connectionID, newData, false);
 			
 			//When data propogates (a callback from ZSystem basically), we update currentImpulse.
-			//we add it to our Impulse object, which we store for tracking.
+			//we add it to our Impulse object, which we store for change tracking and data things. 
 			
 			//Update the visuals and other reactive listeners.
 			foreach (var changed in _currentImpulse.GetChangedConnections())
 			{
 				//todo: broadcast updates of the changed for visual (passive) listeners.
 				//we can keep an Action<byte> on the Connection
-				changed.OnDidChangedAfterImpulse?.Invoke(_connectionData[changed]);
+				//changed.OnDidChangedAfterImpulse?.Invoke(_connectionData[changed]);
 			}
+			
+			ForceRefresh();
 			
 			//after that happens, the code call is back here, and we ... finish.
 			_impulses.Add(_currentImpulse);
 			Debug.Log(_currentImpulse.Changes.Count);
+			return _currentImpulse;
+
+		}
+
+		[ContextMenu("Force Refresh OnDidChange")]
+		public void ForceRefresh()
+		{
+			int listeners = 0;
+			foreach (var connection in _connectionData)
+			{
+				if (_changeListeners.ContainsKey(connection.Key))
+				{
+					listeners+= _changeListeners[connection.Key].Count;
+					_changeListeners[connection.Key].ForEach(listener => listener.OnConnectionDidChange(connection.Key, connection.Value));
+				}
+			}
 			
+			Debug.Log($"Refreshed {listeners} listeners");
 		}
 
 				
@@ -123,6 +143,26 @@ namespace Zoompy
 				Debug.LogWarning($"Unable to get value of connection {zConnection}");
 				//todo: I think this bug is the internal/external connections not being registered correctly?
 				return 0;
+			}
+		}
+
+		public void RegisterChangeListener(ZConnection connection, IConnectionListener listener)
+		{
+			if (_changeListeners.ContainsKey(connection))
+			{
+				_changeListeners[connection].Add(listener);
+			}
+			else
+			{
+				_changeListeners[connection] = new List<IConnectionListener> { listener };
+			}
+		}
+
+		public void DeregisterChangeListener(ZConnection connection, IConnectionListener listener)
+		{
+			if (_changeListeners.TryGetValue(connection, out var listeners))
+			{
+				listeners.Remove(listener);
 			}
 		}
 	}

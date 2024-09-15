@@ -27,13 +27,15 @@ namespace Zoompy
 			{
 				_connectionHub.Impulse(input, 0);
 			}
+			//todo: this calls onChanged from impulse, and then calls it on everyone again.
+			// _connectionHub.ForceRefresh();
 		}
 
 		private void Update()
 		{
 			if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
 			{
-				_connectionHub.Impulse(_outermostSystem.Inputs[0], (byte)Mathf.Abs(1-_connectionHub.Get(_outermostSystem.Inputs[1])));
+				_connectionHub.Impulse(_outermostSystem.Inputs[0], (byte)Mathf.Abs(1-_connectionHub.Get(_outermostSystem.Inputs[0])));
 				Debug.Log(_connectionHub.Get(_outermostSystem.Outputs[0]));
 			}
 
@@ -48,9 +50,13 @@ namespace Zoompy
 			if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
 			{
 				_connectionHub.Impulse(_outermostSystem.Inputs[2],
-					(byte)Mathf.Abs(1 - _connectionHub.Get(_outermostSystem.Inputs[1])));
+					(byte)Mathf.Abs(1 - _connectionHub.Get(_outermostSystem.Inputs[2])));
 				Debug.Log(_connectionHub.Get(_outermostSystem.Outputs[0]));
+			}
 
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				_connectionHub.ForceRefresh();
 			}
 		}
 	}

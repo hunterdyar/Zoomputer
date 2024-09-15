@@ -147,6 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f85a36accb420690896188b4b9adca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curve: 0.4
+  OnMaterial: {fileID: 2100000, guid: 6bd20dec214d89a4eadd1d45e08fe4a3, type: 2}
+  OffMaterial: {fileID: 2100000, guid: 47bccc82a8eea8a48a1ac47fb559eb16, type: 2}
   _portA: {fileID: 0}
   _portB: {fileID: 0}
-  curve: 0.4
